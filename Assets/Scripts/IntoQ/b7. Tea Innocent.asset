@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90e9474367844fd4799bdf302f681030, type: 3}
+  m_Name: b7. Tea Innocent
+  m_EditorClassIdentifier: 
+  _description: you brew tea in a large teapot, as you poor your first cup you the
+    smell hits your nose, and you wake up
+  _Optionchosen: []

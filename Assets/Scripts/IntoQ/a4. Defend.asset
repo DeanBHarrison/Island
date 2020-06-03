@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90e9474367844fd4799bdf302f681030, type: 3}
+  m_Name: a4. Defend
+  m_EditorClassIdentifier: 
+  _description: You jump to the assistance of the weaker head, do you raise your shield
+    to protect him or set a trap for the attacking head?
+  _Optionchosen:
+  - {fileID: 11400000, guid: 83ab593237ffccf4580f322774a2a3fd, type: 2}
+  - {fileID: 11400000, guid: beedb754fa614164f8a678272a6483f4, type: 2}
