@@ -17,4 +17,4 @@ MonoBehaviour:
   _Optionchosen:
   - {fileID: 11400000, guid: 99ba23fbbc298924c80c023c768aaba1, type: 2}
   - {fileID: 11400000, guid: 99ba23fbbc298924c80c023c768aaba1, type: 2}
-  petToSpawn: 0
+  petToSpawn: 1

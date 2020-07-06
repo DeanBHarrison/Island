@@ -20,23 +20,41 @@ public class PetSpawner : MonoBehaviour
     }
     private void Start()
     {
+        spawnFirstPet();
+    }
+
+    public void spawnFirstPet()
+    {
+        //gets the first petIndex to spawn depending on how the questions were answered.
+        petIndex = StateManager.PetSpawnIndex;
         SelectedPetSO = PetSOArray[petIndex];
+        SpawnPet();
     }
 
     public void ChangePet()
     {
 
+        //cycles through pets for debug loaded to a button
         petIndex++;
         if(petIndex == 4)
         {
             petIndex = 0;
         }
-
-        SelectedPetSO = PetSOArray[petIndex];
-        gameObject.GetComponent<SpriteRenderer>().sprite = SelectedPetSO.artwork;        
-        PetStats.instance.setPetStatPotentials();       
-        PetStats.instance.SetPetStatsToDefault();
+        SpawnPet();
+        GameMenu.instance.setPetStatsOnMenu();
     }
+
+    public void SpawnPet()
+    {
+        //spawns a pet based on it's "pet index" sets the artwork, stat potentials then sets its stats and hp to default.
+        SelectedPetSO = PetSOArray[petIndex];
+        gameObject.GetComponent<SpriteRenderer>().sprite = SelectedPetSO.artwork;
+        PetStats.instance.setPetStatPotentials();
+        PetStats.instance.SetPetStatsToDefault();
+        PetStats.instance.FillRedAndBlue();
+    }
+
+
 
 
 

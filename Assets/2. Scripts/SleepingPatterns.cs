@@ -11,8 +11,8 @@ public class SleepingPatterns : MonoBehaviour
 
     public static void ChickSleepPattern()
     {
-        sleepinessRate = 120f;
-        sleepLength = 0.3f;
+        sleepinessRate = 100f;
+        sleepLength = 6f;
         sleepModifier = 1f;
 
     }
@@ -20,7 +20,7 @@ public class SleepingPatterns : MonoBehaviour
     public static void CatSleepPattern()
     {
         sleepinessRate = 160f;
-        sleepLength = 0.15f;
+        sleepLength = 4f;
         sleepModifier = 1.1f;
 
     }
@@ -28,7 +28,7 @@ public class SleepingPatterns : MonoBehaviour
     public static void LizardSleepPattern()
     {
         sleepinessRate = 120f;
-        sleepLength = 0.35f;
+        sleepLength = 6;
         sleepModifier = 0.9f;
 
     }
@@ -36,7 +36,7 @@ public class SleepingPatterns : MonoBehaviour
     public static void WolfSleepPattern()
     {
         sleepinessRate = 100f;
-        sleepLength = 0.4f;
+        sleepLength = 7f;
         sleepModifier = 0.9f;
 
     }

@@ -45,6 +45,18 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(GameMenu.instance.menuIsActive || DialogueManager.instance.ChatActive)
+        {
+
+            canMove = false;
+            Clock.instance.shouldTimePass = false;
+        }else
+        {
+            canMove = true;
+            Clock.instance.shouldTimePass = true; 
+        }
+
+
         if (canMove)
         {
             theRB.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * moveSpeed;

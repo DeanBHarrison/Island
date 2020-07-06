@@ -19,17 +19,13 @@ public class AreaExit : MonoBehaviour
         SetAreaTransitionName();
     }
 
-    void Update()
-    {
-        
-    }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == "Player")
         {
             PlayerController.instance.lastArea = areaTransitionName;
-            Debug.Log("collision with player");
             LoadMenu.LoadnextlevelString(sceneToLoad);
         }
     }

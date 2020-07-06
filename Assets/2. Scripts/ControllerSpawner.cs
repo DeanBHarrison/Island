@@ -11,15 +11,28 @@ public class ControllerSpawner : MonoBehaviour
 
     private void Start()
     {
-        if(!musicPlayer.activeInHierarchy)
-        {
-            Instantiate(musicPlayer);
-        }
+        spawnMusicPlayer();
+        spawnMenu();
+    }
 
-        if (!musicPlayer.activeInHierarchy)
+    //instantiates a new copy of the musicplayer gameobject if it cant find the instance of musicplayer script attached to it
+    public void spawnMusicPlayer()
+    {
+        if (MusicPlayer.instance == null)
         {
             Instantiate(musicPlayer);
         }
     }
+
+    //instantiates a new copy of the menu gameobject if it cant find the instance of game menu script attached to it
+    public void spawnMenu()
+    {
+        if (GameMenu.instance == null)
+        {
+            Instantiate(Menu);
+            Debug.Log("couldn't find game menu instance, so instantiated one");
+        }
+    }
+
 
 }

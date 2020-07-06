@@ -956,3 +956,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MusicToPlay: 2
+  target: {fileID: 0}
+  disablePlayerFollow: 1
+  theMap: {fileID: 0}

@@ -36,11 +36,10 @@ public class StateManager : MonoBehaviour
     {
         if(currentQuestionIndex == 4)
         {
-
+            PetSpawnIndex = _startingstate.petToSpawn;
             Destroy(buttons[0]);
             Destroy(buttons[1]);
-            loadMenu.LoadnextlevelIndex();
-            PetSpawner.instance.petIndex = PetSpawnIndex;
+            loadMenu.LoadnextlevelIndex();           
         }
     }
 

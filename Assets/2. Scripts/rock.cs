@@ -33,7 +33,7 @@ public class rock : MonoBehaviour
 
     public void PickUpRock()
     {
-        if (isPlayerNear && Input.GetKeyDown(KeyCode.R))
+        if (isPlayerNear && Input.GetKeyDown(KeyCode.R) && PlayerController.instance.canMove)
         {
             PetStats.instance.GainXP(xpToGain);
             Destroy(gameObject);

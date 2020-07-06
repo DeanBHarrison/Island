@@ -20,23 +20,35 @@ public class PetStats : MonoBehaviour
     public float charm;
     public float attackPower;
     public float defencePower;
-
-    [Header("Non-Battle Stats")]
+    [Header("Fatigue")]
+    public float currentFatigue;
+    public float maxFatigue = 100;
+    [Header("Sleep")]
     public float currentSleepiness;
     public int maxSleepiness = 100;
     public float sleepinessRate;
     public float sleepLength;
     public float sleepModifier;
-
-    public float currentFatigue;
-    public int maxFatigue = 100;
-
-    //XP/level based stats
+    [Header("Sickness stats")]
+    public float currentSickness;
+    public float maxSickness = 100;
+    public float sicknessModifier = 1f;
+    [Header("Discipline stats")]
+    public float currentDiscipline;
+    public float maxDiscipline = 100;
+    public float DisciplineModifier = 1f;
+    [Header("Hunger stats")]
+    public float currentHunger;
+    public float maxHunger = 100;
+    public float HungerModifier = 1f;
+    public float HungerRate;
+    [Header("XP stats")]
     public int petLevel = 1;
     public float currentXP;
     public float[] xpToNextLevel;
     public int maxLevel = 100;
     public float baseEXP = 1000f;
+   
 
     // battle stats to gain when leveling
     private  int maxRedToGainOnlvl;
@@ -56,6 +68,25 @@ public class PetStats : MonoBehaviour
     private float intellectDefault;
     private float charmDefault;
 
+    private void Awake()
+    {
+        SetUpSingleton();
+    }
+    private void SetUpSingleton()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            if (instance != this)
+            {
+                Destroy(gameObject);
+            }
+        }
+        DontDestroyOnLoad(gameObject);
+    }
     public void SetPetStatsToDefault()
     {
         maxRed = maxRedDefault;
@@ -137,32 +168,14 @@ public class PetStats : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        
-        instance = this;
+    {       
         SetUpXPRequirements();
        setPetStatPotentials();
+        InvokeRepeating("GettingSleepy", 0.01f, 0.2f);
+        InvokeRepeating("GettingHungry", 0.01f, 0.2f);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        GettingSleepy();
 
-
-
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            GainXP(500);
-        }
-
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            GainFatigue(20);
-        }
-
-
-    }
 
     public void SetUpXPRequirements()
     {
@@ -206,20 +219,80 @@ public class PetStats : MonoBehaviour
 
     public void GainFatigue(float fatigueToGain)
     {
-        currentFatigue += Mathf.FloorToInt(fatigueToGain);
+        currentFatigue += fatigueToGain;
         if (currentFatigue >= maxFatigue)
         {
             Debug.Log("fatigue over max");
             currentFatigue = maxFatigue;
-        }
-        
+        }       
     }
+
+    public void GainSickness(float sicknessToGain)
+    {
+        currentSickness += sicknessToGain;
+        if (currentSickness >= maxSickness)
+        {
+            Debug.Log("sickness over max");
+            currentSickness = maxSickness;
+        }
+    }
+
+    public void GainSleepiness(float sleepinessToGain)
+    {
+        currentSleepiness += sleepinessToGain;
+
+        if (currentSleepiness >= 100)
+        {
+            Debug.Log("sleepinessover max");
+            currentSleepiness = 100;
+        }
+
+        SleepinessSlider.instance.updateSleepinessSlider();
+
+    }
+
+    public void GainDiscipline(float DisciplineToGain)
+    {
+        currentDiscipline += DisciplineToGain;
+
+        if (currentDiscipline >= 100)
+        {
+            Debug.Log("Discipline over max");
+            currentDiscipline = 100;
+        }
+        DisciplineSlider.instance.updateDisciplineSlider();
+
+    }
+
+    public void GainHunger(float HungerToGain)
+    {
+        currentHunger += HungerToGain;
+
+        if (currentHunger >= 100)
+        {
+            Debug.Log("Hunger over max");
+            currentHunger = 100;
+        }
+        HungerSlider.instance.updateHungerSlider();
+
+    }
+
+    public bool ResetSleepCycleOnceONLY = false;
 
     public void GettingSleepy()
     {
         if (Clock.instance.shouldTimePass)
         {
-            currentSleepiness += Time.deltaTime / Clock.instance.realSecondsPerDay * sleepinessRate;
+            //DISABLED WHILE WORKING ON GAME
+            // currentSleepiness += Time.deltaTime / Clock.instance.realSecondsPerDay * sleepinessRate;
+
+            currentSleepiness += Clock.instance.invokeTime20MS * sleepinessRate;
+
+            if (currentSleepiness < 80 && ResetSleepCycleOnceONLY == true)
+            {
+                PetEmotes.instance.removeEmoteFromCycle(0);
+                ResetSleepCycleOnceONLY = false;
+            }
 
             if (currentSleepiness >= maxSleepiness)
             {
@@ -227,17 +300,101 @@ public class PetStats : MonoBehaviour
                 currentSleepiness = maxSleepiness;
             }
 
-            if (currentSleepiness > 80)
+            if (currentSleepiness > 80 && ResetSleepCycleOnceONLY == false)
             {
-                PlayerController.instance.canMove = false;
-                Debug.Log("Need to sleep!");
-                Clock.instance.shouldTimePass = false;
-                GameMenu.instance.sleepButton.SetActive(true);
+                Debug.Log("sleep trigger");
+                PetEmotes.instance.addEmoteToCycle(0);
+                PetEmotes.instance.resetCycle = true;
+                ResetSleepCycleOnceONLY = true;
             }
+
+            if (currentSleepiness >= 100)
+            {
+                Clock.instance.shouldTimePass = false;
+
+            }
+            SleepinessSlider.instance.updateSleepinessSlider();
         }
     }
+    // this is used due to gettinhungry being called in update but i only 
+    public bool ResetHungerCycleOnceONLY = false;
 
 
+    public void GettingHungry()
+    {
+        if (Clock.instance.shouldTimePass)
+        {
+            //DISABLED WHILE WORKING ON GAME
+            //currentHunger += Time.deltaTime / Clock.instance.realSecondsPerDay * HungerRate;
+
+             currentHunger += Clock.instance.invokeTime20MS * HungerRate;
+             // Debug.Log("current hunger : " + currentHunger + "currentTimeHunger :" + currentTimeHunger);
+        }
+
+
+        if (currentHunger < 80 && ResetHungerCycleOnceONLY == true)
+            {
+                PetEmotes.instance.removeEmoteFromCycle(1);
+                ResetHungerCycleOnceONLY = false;
+            }
+
+            if (currentHunger > 80 && ResetHungerCycleOnceONLY == false)
+            {
+            Debug.Log("hunger trigger");
+                PetEmotes.instance.addEmoteToCycle(1);
+                PetEmotes.instance.resetCycle = true;
+                ResetHungerCycleOnceONLY = true;
+
+
+            }
+
+            if (currentHunger >= 100)
+            {
+                Debug.Log("hunger over  max");
+                currentHunger = maxHunger;
+
+            }
+            HungerSlider.instance.updateHungerSlider();
+        
+    }
+
+    //gain stats methods to be called from other scripts
+    public void gainMaxRed(int maxRedToGain)
+    {
+        maxRed += maxRedToGain;
+       
+    }
+
+    public void gainMaxBlue(int maxBlueToGain)
+    {
+        maxBlue += maxBlueToGain;
+
+    }
+
+    public void gainStrength(float strengthToGain)
+    {
+        strength += strengthToGain;
+    }
+
+    public void gainGrit(float gritToGain)
+    {
+        grit += gritToGain;
+    }
+
+    public void gainSpeed(float speedToGain)
+    {
+        speed += speedToGain;
+    }
+
+    public void gainIntellect(float intellectToGain)
+    {
+        intellect += intellectToGain;
+    }
+
+    public void gainCharm(float charmToGain)
+    {
+        charm += charmToGain;
+    }
 
   
   
