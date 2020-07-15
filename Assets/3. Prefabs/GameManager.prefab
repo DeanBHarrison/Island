@@ -102,3 +102,4 @@ MonoBehaviour:
   referenceItems:
   - {fileID: 2221740022560523781, guid: e830b5bcac11c69479f6dd40d4a0d7f8, type: 3}
   - {fileID: 4717224205397072834, guid: 57a10c96d06eccc42819e6af90796b82, type: 3}
+  currentGold: 50

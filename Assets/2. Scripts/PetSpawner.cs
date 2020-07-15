@@ -50,7 +50,6 @@ public class PetSpawner : MonoBehaviour
         SelectedPetSO = PetSOArray[petIndex];
         gameObject.GetComponent<SpriteRenderer>().sprite = SelectedPetSO.artwork;
         PetStats.instance.setPetStatPotentials();
-        PetStats.instance.SetPetStatsToDefault();
         PetStats.instance.FillRedAndBlue();
     }
 

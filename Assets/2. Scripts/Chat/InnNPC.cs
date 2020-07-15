@@ -4,17 +4,49 @@ using UnityEngine;
 
 public class InnNPC : MonoBehaviour
 {
- 
+    [Header("material Glow")]
+    //switch between on mouse over
+    public Material standardMat;
+    public Material GlowMat;
+    public GameObject spotLight;
 
-    public void sleep()
+    [Header("chat bubble")]
+    public string hoverChat;
+    public Transform InnKeeperTransform;
+    //just to avoid using getcomponent
+
+    public SpriteRenderer theSpriterenderer;
+
+    private void Start()
     {
-            Clock.instance.PassTime(PetStats.instance.sleepLength);
-            PetStats.instance.currentSleepiness = 0;
-            PetStats.instance.currentFatigue = 0;
-            FatigueSlider.instance.updateFatigueSlider();
-            DialogueManager.instance.DisplayNextSentence();
-            Clock.instance.CheckIfItShouldBeDark();
-            Clock.instance.shouldTimePass = true;
+        if (PlayerController.instance.canMove)
+        {
+            InvokeRepeating("Chatter", 1f, 15f);
+        }
+    }
+
+    private void Chatter()
+    {
+        ChatBubble.Create(InnKeeperTransform, new Vector2(0, 1f), "howdy partner");
+    }
+    private void OnMouseEnter()
+    {
+        theSpriterenderer.material = GlowMat;
+        spotLight.SetActive(true);
+    }
+
+    private void OnMouseExit()
+    {
+        theSpriterenderer.material = standardMat;
+        spotLight.SetActive(false);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            DialogueManager.instance.SetChatOption(0, 2);
+        }
     }
 
 }

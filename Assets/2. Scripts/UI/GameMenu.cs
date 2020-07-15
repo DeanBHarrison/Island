@@ -1,24 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameMenu : MonoBehaviour
 {
     public static GameMenu instance;
-    public GameObject firstMenu;
     public GameObject gameMenu;
     public GameObject petImage;
     public GameObject shopMenu;
 
+    [Header("bottom right menus")]
     public GameObject petStatsMenu;
     public GameObject itemsMenu;
+    public GameObject MapMenu;
     public bool menuIsActive;
 
-    [Header("Small Menu Buttons")]
-    public GameObject itemsButton;
-    public GameObject statsButton;
-    public GameObject Sleepbutton;
+ 
     public Text goldText;
 
     [Header("Menu stats gameobjects")]
@@ -38,62 +37,30 @@ public class GameMenu : MonoBehaviour
     public GameObject itemDescriptionBox;
     public GameObject itemActionBox;
 
-
+    public void closeActionButton()
+    {
+        itemActionBox.SetActive(false);
+    }
 
     private void Awake()
     {
         SetUpSingleton();
     }
     // Start is called before the first frame update
-
+    private void Start()
+    {
+        SetCurrentGold();
+    }
 
     // Update is called once per frame
     void Update()
     {
-        openMenu();
-    }
 
-    public void feedPet()
-    {
-        PetStats.instance.GainHunger(-80);
     }
 
 
 
-    public void openMenu()
-    {
-        if (Input.GetButtonDown("Fire2"))
-        {           
-          if(!firstMenu.activeInHierarchy && PlayerController.instance.canMove)
-            {
-                menuIsActive = true;
-                firstMenu.SetActive(true);
-            
-            }
-            else
-           if (firstMenu.activeInHierarchy)
-            {
-                firstMenu.SetActive(false);
-                menuIsActive = false;
-            }
-            else
-           if(gameMenu.activeInHierarchy)
-            {
-                gameMenu.SetActive(false);
-                petStatsMenu.SetActive(false);
-                itemsMenu.SetActive(false);
-                GameMenu.instance.itemDescriptionBox.SetActive(false);
-                GameMenu.instance.itemActionBox.SetActive(false);
 
-                firstMenu.SetActive(true);
-            }else
-            if (shopMenu.activeInHierarchy)
-            {
-                shopMenu.SetActive(false);
-            }
-
-        }
-    }
 
     private void SetUpSingleton()
     {
@@ -116,33 +83,85 @@ public class GameMenu : MonoBehaviour
     public void setPetStatsOnMenu()
     {
      petImage.GetComponent<Image>().sprite = PetSpawner.instance.SelectedPetSO.artwork;
-     goldText.text = InventoryManager.instance.currentGold.ToString() + "g";
+        SetCurrentGold();
      maxRedMenu.text = PetStats.instance.maxRed.ToString();
      maxBlueMenu.text = PetStats.instance.maxBlue.ToString();
      strengthMenu.text = PetStats.instance.strength.ToString();
-     gritMenu.text = PetStats.instance.grit.ToString();
      speedMenu.text = PetStats.instance.speed.ToString();
      intellectMenu.text = PetStats.instance.intellect.ToString();
      charmMenu.text = PetStats.instance.charm.ToString();
      }
 
+    public void SetCurrentGold()
+    {
+        goldText.text = InventoryManager.instance.currentGold.ToString() + " g";
+
+    }
+
+    public void closeAllMenus()
+    {
+        shopMenu.SetActive(false);
+        gameMenu.SetActive(false);
+        itemsMenu.SetActive(false);
+        petStatsMenu.SetActive(false);
+        MapMenu.SetActive(false);
+        menuIsActive = false;
+    }
+
+    public void MapButton()
+    {
+        if (!MapMenu.activeInHierarchy)
+        {
+            closeAllMenus();
+            gameMenu.SetActive(true);
+            MapMenu.SetActive(true);
+            menuIsActive = true;
+        }
+        else
+        if (MapMenu.activeInHierarchy)
+        {
+            closeAllMenus();
+        }
+    }
     public void itemButton()
     {
-        InventoryManager.instance.SortItems();
-        ShowItems();
-        firstMenu.SetActive(false);
-        gameMenu.SetActive(true);
-        itemsMenu.SetActive(true);
-        menuIsActive = true;     
+        if (!itemsMenu.activeInHierarchy)
+        {
+            //first close all menus incase another menu is open
+            closeAllMenus();
+
+            //sort and set up items in ventory before opening
+            InventoryManager.instance.SortItems();
+            ShowItems();
+
+            // then open menus
+            gameMenu.SetActive(true);
+            itemsMenu.SetActive(true);
+
+            // keep track of current menu state
+            menuIsActive = true;
+        }else
+        if(itemsMenu.activeInHierarchy)
+        {
+            closeAllMenus();
+        }
     }
 
     public void StatsButton()
     {
-        setPetStatsOnMenu();
-        firstMenu.SetActive(false);
-        gameMenu.SetActive(true);
-        petStatsMenu.SetActive(true);
-        menuIsActive = true;
+        if (!petStatsMenu.activeInHierarchy)
+        {
+            closeAllMenus();
+            setPetStatsOnMenu();
+            gameMenu.SetActive(true);
+            petStatsMenu.SetActive(true);
+            menuIsActive = true;
+        }else
+        if (petStatsMenu.activeInHierarchy)
+        {
+            closeAllMenus();
+        }
+
 
     }
 
@@ -152,13 +171,11 @@ public class GameMenu : MonoBehaviour
         {
             Clock.instance.PassTime(PetStats.instance.sleepLength);
             PetStats.instance.currentSleepiness = 0;
-            PetStats.instance.currentFatigue = 0;
-            FatigueSlider.instance.updateFatigueSlider();
             Clock.instance.CheckIfItShouldBeDark();
             Clock.instance.shouldTimePass = true;
         }
     }
-    // sets the images of current held items
+    // sets the images and info of current held items and gets rid of the images if theyre empty
     public void ShowItems()
     {
         for(int i = 0; i < itemButtons.Length; i++)
@@ -182,6 +199,7 @@ public class GameMenu : MonoBehaviour
     }
 
     // method to set variable activeitem which is used to manipulate items from game, set through other scripts when called using the parameter.
+    // this sets the item name and description when you click on the item
     public void SelectItem(Item newItem)
     {
         activeItem = newItem;

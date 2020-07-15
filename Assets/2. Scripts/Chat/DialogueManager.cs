@@ -5,6 +5,15 @@ using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
+    [Header("yes/no Buttons")]
+    public GameObject yesNoInn;
+    public GameObject yesNoShop;
+
+    [Header("yes/no triggers")]
+    public int buttonSpawnIndex;
+    public int sentenceSpawnIndex;
+
+    [Header("dialogue objects")]
     //UI elements to update when cycling through dialogue
     public Text nameText;
     public Text dialogueText;
@@ -34,13 +43,20 @@ public class DialogueManager : MonoBehaviour
 
     private void Update()
     {
+
+        if(Input.GetKeyDown(KeyCode.H))
+        {
+            GameMenu.instance.shopMenu.SetActive(true);
+            Debug.Log("tried to set shopmenu active");
+        }
     }
     // this method is passing a class through as it's paramter, this class holds all the information of what is to be said in the dialogue
+
+    public int currentSentenceCounter;
     public void StartDialogue(Dialogue dialogue)
     {
-        // check if this method is being called correctly in debug log
-        //Debug.Log("starting conversation with" + dialogue.name);
-
+        //added in to keep track of what sentence we are on so i can make a method to spawn a button on a certain one
+        currentSentenceCounter = 0;
         // bool sent to true to enable animator object to move
         animator.SetBool("isOpen", true);
 
@@ -66,28 +82,54 @@ public class DialogueManager : MonoBehaviour
 
     public void DisplayNextSentence()
     {
+
         //if the remaing count is 0 it means to convesation is over, it then calls EndDialogue and returns from the rest of the method.
-        if(sentences.Count == 1)
+        if(sentences.Count == 0)
         {
             EndDialogue();
             return;            
         }
 
 
-        //removes the current sentence from the queue
+        //removes the current sentence from the queue and sets it to the variable sentence
         string sentence = sentences.Dequeue();
+        //add 1 to the sentence counter for spawning options
+        currentSentenceCounter++;
 
         //this is called before starting the coroutine incase the player clicks next before the chat has ended
         StopAllCoroutines();
 
         // start the corotuine below that loops though the chars one by one
         StartCoroutine(TypeSentence(sentence));
+        CheckForChatOptions();
 
-        //display the setence we just removed from the queue as the text on the UI graphic
-         //dialogueText.text = sentence;
+    }
 
+    public void CheckForChatOptions()
+    {
+        if (currentSentenceCounter == sentenceSpawnIndex)
+        {
+            switch (buttonSpawnIndex)
+            {
+                case 0:
+                    yesNoInn.SetActive(true);
+                    break;
 
-       // Debug.Log(sentence);
+                case 1:
+                    yesNoShop.SetActive(true);
+                    break;
+
+                default:
+                    Debug.Log("something messed up spawning dialogue buttons");
+                    break;
+            }
+        }
+    }
+
+    public void SetChatOption(int ButtonSpawnIndex, int SentenceSpawnIndex)
+    {
+        buttonSpawnIndex = ButtonSpawnIndex;
+        sentenceSpawnIndex = SentenceSpawnIndex;
     }
 
     IEnumerator TypeSentence (string sentence)
@@ -127,5 +169,74 @@ public class DialogueManager : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+    }
+
+    public void buttonPressNo()
+    {
+        //disable the button that was activated
+        switch (buttonSpawnIndex)
+        {
+            case 0:
+                yesNoInn.SetActive(false);
+                break;
+
+            case 1:
+                yesNoShop.SetActive(false);
+                break;
+
+            default:
+                Debug.Log("something messed up despawning dialogue buttons");
+                break;
+        }
+        // carry on the conversation so the chat box closes
+        DisplayNextSentence();
+    }
+
+    public void buttonPressYesInn()
+    {
+        //disable the button that was activated
+        switch (buttonSpawnIndex)
+        {
+            case 0:
+                yesNoInn.SetActive(false);
+                break;
+
+            case 1:
+                yesNoShop.SetActive(false);
+                break;
+
+            default:
+                Debug.Log("something messed up despawning dialogue buttons");
+                break;
+        }
+
+        Clock.instance.PassTime(PetStats.instance.sleepLength);
+            PetStats.instance.currentSleepiness = 0;
+            DisplayNextSentence();
+    }
+
+    public void buttonPressYesVegVendorReg()
+    {
+        //GameMenu.instance.shopMenu.SetActive(true);
+        //disable the button that was activated
+        switch (buttonSpawnIndex)
+        {
+            case 0:
+                yesNoInn.SetActive(false);
+                break;
+
+            case 1:
+                yesNoShop.SetActive(false);
+                break;
+
+            default:
+                Debug.Log("something messed up despawning dialogue buttons");
+                break;
+        }
+
+        GameMenu.instance.shopMenu.SetActive(true);
+        GameMenu.instance.menuIsActive = true;
+        VegVendor.instance.VegVendorSetupShop();
+        DisplayNextSentence();
     }
 }

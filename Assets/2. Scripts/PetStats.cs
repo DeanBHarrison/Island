@@ -13,35 +13,40 @@ public class PetStats : MonoBehaviour
     public int maxRed = 10;
     public int currentBlue;
     public int maxBlue;
+
     public float strength;
-    public float grit;
     public float speed;
     public float intellect;
     public float charm;
+
     public float attackPower;
     public float defencePower;
-    [Header("Fatigue")]
-    public float currentFatigue;
-    public float maxFatigue = 100;
-    [Header("Sleep")]
+    public float attackSpeed;
+    public float Evasion;
+
+
+
+    [Header("Sleepiness")]
     public float currentSleepiness;
     public int maxSleepiness = 100;
     public float sleepinessRate;
     public float sleepLength;
     public float sleepModifier;
-    [Header("Sickness stats")]
-    public float currentSickness;
-    public float maxSickness = 100;
-    public float sicknessModifier = 1f;
-    [Header("Discipline stats")]
-    public float currentDiscipline;
-    public float maxDiscipline = 100;
-    public float DisciplineModifier = 1f;
+    [Header("Health")]
+    public float currentHealth;
+    public float maxHealth = 100;
+    public float HealthModifier = 1f;
+    [Header("Happiness stats")]
+    public float currentHapiness;
+    public float maxHapiness = 100;
+    public float HapinessModifier = 1f;
     [Header("Hunger stats")]
     public float currentHunger;
     public float maxHunger = 100;
     public float HungerModifier = 1f;
     public float HungerRate;
+
+    //needs  removing
     [Header("XP stats")]
     public int petLevel = 1;
     public float currentXP;
@@ -60,13 +65,13 @@ public class PetStats : MonoBehaviour
     private float charmToGainOnlvl;
 
     // default stats to give a pet
-    private int maxRedDefault;
+   /* private int maxRedDefault;
     private int maxBlueDefault;
     private float strengthDefault;
     private float gritDefault;
     private float speedDefault;
     private float intellectDefault;
-    private float charmDefault;
+    private float charmDefault;*/
 
     private void Awake()
     {
@@ -87,7 +92,7 @@ public class PetStats : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
     }
-    public void SetPetStatsToDefault()
+   /* public void SetPetStatsToDefault()
     {
         maxRed = maxRedDefault;
         maxBlue = maxBlueDefault;
@@ -96,17 +101,8 @@ public class PetStats : MonoBehaviour
         speed = speedDefault;
         intellect = intellectDefault;
         charm = charmDefault;
-    }
-    public void setDefaultStatsPotential()
-    {
-        maxRedDefault = DefaultPetStats.maxRed;
-        maxBlueDefault = DefaultPetStats.maxBlue;
-        strengthDefault = DefaultPetStats.strength;
-        gritDefault = DefaultPetStats.grit;
-        speedDefault = DefaultPetStats.speed;
-        intellectDefault = DefaultPetStats.intellect;
-        charmDefault = DefaultPetStats.charm;
-    }
+    }*/
+
 
     public void setStatsToGainOnLVL()
     {
@@ -134,25 +130,21 @@ public class PetStats : MonoBehaviour
             case 0:
                 PetStatsGainOnLevelUp.ChickStatGain();
                 SleepingPatterns.ChickSleepPattern();
-                DefaultPetStats.ChickDefaultStats();
                 break;
 
             case 1:
                 PetStatsGainOnLevelUp.CatStatGain();
                 SleepingPatterns.CatSleepPattern();
-                DefaultPetStats.CatDefaultStats();
                 break;
 
             case 2:
                 PetStatsGainOnLevelUp.WolfStatGain();
                 SleepingPatterns.WolfSleepPattern();
-                DefaultPetStats.WolfDefaultStats();
                 break;
 
             case 3:
                 PetStatsGainOnLevelUp.LizardStatGain();
                 SleepingPatterns.LizardSleepPattern();
-                DefaultPetStats.LizardDefaultStats();
                 break;
 
             default:
@@ -161,7 +153,6 @@ public class PetStats : MonoBehaviour
         }
         setSleepPattern();
         setStatsToGainOnLVL();
-        setDefaultStatsPotential();
     }
 
 
@@ -203,7 +194,6 @@ public class PetStats : MonoBehaviour
         maxRed += maxRedToGainOnlvl;
         maxBlue += maxBlueToGainOnlvl;
         strength += strengthToGainOnlvl;
-        grit += gritToGainOnlvl;
         speed += speedToGainOnlvl;
         intellect += intellectToGainOnlvl;
         charm += charmToGainOnlvl;
@@ -217,23 +207,14 @@ public class PetStats : MonoBehaviour
         currentRed = maxRed;
     }
 
-    public void GainFatigue(float fatigueToGain)
-    {
-        currentFatigue += fatigueToGain;
-        if (currentFatigue >= maxFatigue)
-        {
-            Debug.Log("fatigue over max");
-            currentFatigue = maxFatigue;
-        }       
-    }
 
-    public void GainSickness(float sicknessToGain)
+    public void GainHealth(float HealthToGain)
     {
-        currentSickness += sicknessToGain;
-        if (currentSickness >= maxSickness)
+        currentHealth += HealthToGain;
+        if (currentHealth >= maxHealth)
         {
-            Debug.Log("sickness over max");
-            currentSickness = maxSickness;
+            Debug.Log("Health over max");
+            currentHealth = maxHealth;
         }
     }
 
@@ -251,16 +232,16 @@ public class PetStats : MonoBehaviour
 
     }
 
-    public void GainDiscipline(float DisciplineToGain)
+    public void GainHapiness(float HapinessToGain)
     {
-        currentDiscipline += DisciplineToGain;
+        currentHapiness += HapinessToGain;
 
-        if (currentDiscipline >= 100)
+        if (currentHapiness >= 100)
         {
-            Debug.Log("Discipline over max");
-            currentDiscipline = 100;
+            Debug.Log("Hapiness over max");
+            currentHapiness = 100;
         }
-        DisciplineSlider.instance.updateDisciplineSlider();
+        HapinessSlider.instance.updateHapinessSlider();
 
     }
 
@@ -296,13 +277,11 @@ public class PetStats : MonoBehaviour
 
             if (currentSleepiness >= maxSleepiness)
             {
-                Debug.Log("sleepiness over max");
                 currentSleepiness = maxSleepiness;
             }
 
             if (currentSleepiness > 80 && ResetSleepCycleOnceONLY == false)
             {
-                Debug.Log("sleep trigger");
                 PetEmotes.instance.addEmoteToCycle(0);
                 PetEmotes.instance.resetCycle = true;
                 ResetSleepCycleOnceONLY = true;
@@ -340,7 +319,6 @@ public class PetStats : MonoBehaviour
 
             if (currentHunger > 80 && ResetHungerCycleOnceONLY == false)
             {
-            Debug.Log("hunger trigger");
                 PetEmotes.instance.addEmoteToCycle(1);
                 PetEmotes.instance.resetCycle = true;
                 ResetHungerCycleOnceONLY = true;
@@ -350,7 +328,6 @@ public class PetStats : MonoBehaviour
 
             if (currentHunger >= 100)
             {
-                Debug.Log("hunger over  max");
                 currentHunger = maxHunger;
 
             }
@@ -376,10 +353,7 @@ public class PetStats : MonoBehaviour
         strength += strengthToGain;
     }
 
-    public void gainGrit(float gritToGain)
-    {
-        grit += gritToGain;
-    }
+
 
     public void gainSpeed(float speedToGain)
     {

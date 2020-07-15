@@ -44,15 +44,7 @@ public class Treadmill : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1") && isPlayerNear && PlayerController.instance.canMove)
         {
-            PetStats.instance.gainSpeed(3);
-            PetStats.instance.GainFatigue(fatigueToAdd);
-            FatigueSlider.instance.updateFatigueSlider();
-            if (PetStats.instance.currentFatigue >= 100)
-            {
-                PetStats.instance.GainSickness(5f);
-                SicknessSlider.instance.updateSicknessSlider();
-                Debug.Log("sickness added on use treamill");
-            }           
+            PetStats.instance.gainSpeed(3);         
             PetStats.instance.GainSleepiness(sleepinessToAdd);
             Clock.instance.PassTime(1);
 

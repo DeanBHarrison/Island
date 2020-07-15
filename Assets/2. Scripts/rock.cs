@@ -39,7 +39,6 @@ public class rock : MonoBehaviour
             Destroy(gameObject);
             isPlayerNear = false;
             MusicPlayer.instance.PlaySFX(soundToPlay);
-            PetStats.instance.currentFatigue += fatigueToAdd;
         }
     }
 

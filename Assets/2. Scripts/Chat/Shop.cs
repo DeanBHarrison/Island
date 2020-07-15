@@ -71,9 +71,13 @@ public class Shop : MonoBehaviour
         selectedItem = Itemtobuy;
         buyItemName.text = selectedItem.itemName;
         buyItemDescription.text = selectedItem.description;
-        buyItemPrice.text = "value :" + selectedItem.value;
+        buyItemPrice.text = selectedItem.value + "g";
     }
 
+    public void closeActionButton()
+    {
+        itemActionBox.SetActive(false);
+    }
     public void buyItem()
     {
         if(InventoryManager.instance.currentGold >= selectedItem.value)
@@ -84,6 +88,7 @@ public class Shop : MonoBehaviour
         }
 
         goldText.text = InventoryManager.instance.currentGold.ToString() + "g";
+        GameMenu.instance.SetCurrentGold();
     }
 
     

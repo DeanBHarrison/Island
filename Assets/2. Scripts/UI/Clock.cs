@@ -7,8 +7,15 @@ using UnityEngine.UI;
 
 public class Clock : MonoBehaviour
 {
+
+    [Header("changing fade")]
+
+
+
+
+
+    [Header("clock")]
     public static Clock instance;
-    public GameObject blackCanvas;
     public GameObject ClockHand;
     public Image background;
     public bool shouldTimePass = false;
@@ -35,11 +42,11 @@ public class Clock : MonoBehaviour
 
     public float sunset = 21;
     public float sunsetDuration = 3;
-    private float TimeOfDayAdjustedForSunset;
+    public float TimeOfDayAdjustedForSunset;
 
     public float sunrise = 9;
     public float sunriseDuration = 3;
-    private float TimeOfDayAdjustedForSunrise;
+    public float TimeOfDayAdjustedForSunrise;
 
     public bool ItShouldBeDark;
 
@@ -54,8 +61,8 @@ public class Clock : MonoBehaviour
     private void Start()
     {
         CheckIfItShouldBeDark();
-        InvokeRepeating("Sunset", 0.01f, 0.2f);
-        InvokeRepeating("Sunrise", 0.01f, 0.2f);
+        //InvokeRepeating("Sunset", 0.01f, 0.2f);
+        //InvokeRepeating("Sunrise", 0.01f, 0.2f);
         InvokeRepeating("ChangeClockColor", 0.01f, 1f);
     }
 
@@ -103,10 +110,10 @@ public class Clock : MonoBehaviour
         }
     }
 
-    public void Sunset()
+    public float Sunset()
     {
         // set variblaes to be used in method below
-        var Image = blackCanvas.GetComponent<Image>();
+        float Fadefloat = 0;
         TimeOfDayAdjustedForSunset = timeOfDay;
 
         //This makes the time of day counter not reset past 12 if it needs to keep going to scale the alpha down for sunset. it keeps going
@@ -121,18 +128,18 @@ public class Clock : MonoBehaviour
 
         if (TimeOfDayAdjustedForSunset > sunset && TimeOfDayAdjustedForSunset < (sunset + sunsetDuration))
         {
-           
-            var tempColor = Image.color;
-            tempColor.a = (TimeOfDayAdjustedForSunset - sunset)/ (2*sunsetDuration);
-            Image.color = tempColor;
 
+            //Fadefloat = (TimeOfDayAdjustedForSunset - sunset)/ (2*sunsetDuration);
+            Fadefloat = 1F - (TimeOfDayAdjustedForSunset - sunset) / (2 * sunsetDuration);
+            return Fadefloat;
         }
+        return Fadefloat;
     }
 
-    public void Sunrise()
+    public float Sunrise()
     {
         // set variblaes to be used in method below
-        var Image = blackCanvas.GetComponent<Image>();
+        float Fadefloat = 0;
         TimeOfDayAdjustedForSunrise = timeOfDay;
 
         //This makes the time of day counter not reset past 12 if it needs to keep going to scale the alpha down for sunset. it keeps going
@@ -149,18 +156,15 @@ public class Clock : MonoBehaviour
 
         if (TimeOfDayAdjustedForSunrise > sunrise && TimeOfDayAdjustedForSunrise < (sunrise + sunriseDuration))
         {
-            var tempColor = Image.color;
-            tempColor.a = 0.5F - (TimeOfDayAdjustedForSunrise - sunrise) / (2 * sunriseDuration);
-            Image.color = tempColor;
-
+            Fadefloat = 0.5f + (TimeOfDayAdjustedForSunrise - sunrise) / (2 * sunriseDuration);
+            //Fadefloat = 0.5F - (TimeOfDayAdjustedForSunrise - sunrise) / (2 * sunriseDuration);
+            return Fadefloat;
         }
+        return Fadefloat;
     }
 
     public void CheckIfItShouldBeDark()
-    {
-
-        
-        var Image = blackCanvas.GetComponent<Image>();
+    {      
         if (sunrise > timeOfDay && sunset > timeOfDay)
         {
             if(timeOfDay - sunrise > timeOfDay - sunset)
@@ -193,16 +197,12 @@ public class Clock : MonoBehaviour
 
         if(ItShouldBeDark)
         {
-            var tempColor = Image.color;
-            tempColor.a = 0.5F;
-            Image.color = tempColor;
+            CameraController.instance.light2d.intensity = 0.5f;
             //particleController.instance.WhichParticleSystem(true);
         }
         else
         {
-            var tempColor = Image.color;
-            tempColor.a = 0F;
-            Image.color = tempColor;
+            CameraController.instance.light2d.intensity = 1f;
             //particleController.instance.WhichParticleSystem(false);
         }
        // Debug.Log(ItShouldBeDark);
@@ -229,6 +229,7 @@ public class Clock : MonoBehaviour
         dayLength += timeToPass/24;
         // to fix sleepiness filling up even when set to 0 after sleeping
         lastInvokeTime20MS = dayLength;
+        CheckIfItShouldBeDark();
         shouldTimePass = true;
     }
 }
