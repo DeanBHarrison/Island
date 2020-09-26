@@ -47,6 +47,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -97,7 +98,7 @@ MonoBehaviour:
   PossibleEmotes:
   - {fileID: 804741048422990168, guid: bb64b92bfa9015f498210f180dff1ef3, type: 3}
   - {fileID: -8951304189195089106, guid: bb64b92bfa9015f498210f180dff1ef3, type: 3}
-  - {fileID: 0}
+  - {fileID: -1241399281213930050, guid: bb64b92bfa9015f498210f180dff1ef3, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   CurrentEmotesToCycle:
@@ -123,7 +124,6 @@ GameObject:
   - component: {fileID: 6755566774185271496}
   - component: {fileID: 373291243}
   - component: {fileID: 8675178301882651698}
-  - component: {fileID: 136824570}
   - component: {fileID: 1024471064}
   m_Layer: 0
   m_Name: PetController
@@ -166,6 +166,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a8d8eb3e256d2fd40957782af8314710, type: 2}
   SelectedPetSO: {fileID: 11400000, guid: cf1ec853a755d474a93d63a9f688914c, type: 2}
   petIndex: 1
+  pets: 0
 --- !u!114 &3990807538934017815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,6 +183,7 @@ MonoBehaviour:
   moveSpeed: 7
   lastArea: 
   canMove: 1
+  isWaiting: 0
 --- !u!50 &5070899388295294295
 Rigidbody2D:
   serializedVersion: 4
@@ -218,6 +220,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -336,9 +339,13 @@ MonoBehaviour:
   speed: 0
   intellect: 0
   charm: 0
+  attackPower: 0
+  defencePower: 0
+  attackSpeed: 0
+  Evasion: 0
   currentSleepiness: 0
   maxSleepiness: 100
-  sleepinessRate: 100
+  sleepinessRate: 50
   sleepLength: 7
   sleepModifier: 0
   currentHealth: 0
@@ -347,29 +354,17 @@ MonoBehaviour:
   currentHapiness: 0
   maxHapiness: 100
   HapinessModifier: 1
+  BoredomRate: 100
   currentHunger: 0
   maxHunger: 100
   HungerModifier: 1
-  HungerRate: 100
+  HungerRate: 50
   petLevel: 1
-  currentXP: 0
-  xpToNextLevel: []
   maxLevel: 100
-  baseEXP: 1000
+  pets: 0
   ResetSleepCycleOnceONLY: 0
   ResetHungerCycleOnceONLY: 0
---- !u!114 &136824570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7734158965943271544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adb06fd960ea24e4a847c102a4b83c41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  ResetBoredomCycleOnceONLY: 0
 --- !u!114 &1024471064
 MonoBehaviour:
   m_ObjectHideFlags: 0

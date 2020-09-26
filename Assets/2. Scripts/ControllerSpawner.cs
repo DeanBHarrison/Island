@@ -8,6 +8,8 @@ public class ControllerSpawner : MonoBehaviour
 
     public GameObject musicPlayer;
     public GameObject Menu;
+    public GameObject GameManager;
+    public GameObject PetController;
 
     private void Start()
     {

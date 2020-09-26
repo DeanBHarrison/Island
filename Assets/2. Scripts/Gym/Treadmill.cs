@@ -12,10 +12,13 @@ public class Treadmill : MonoBehaviour
     private bool isPlayerNear = false;
     public float fatigueToAdd;
     public float sleepinessToAdd;
+    public bool mouseEnter = false;
+    Transform canvas;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+         canvas = FindObjectOfType<GameMenu>().transform;
     }
 
     // Update is called once per frame
@@ -32,6 +35,16 @@ public class Treadmill : MonoBehaviour
         }
     }
 
+    private void OnMouseEnter()
+    {
+        mouseEnter = true;
+    }
+
+    private void OnMouseExit()
+    {
+        mouseEnter = false;
+    }
+
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.tag == "Player")
@@ -42,13 +55,20 @@ public class Treadmill : MonoBehaviour
 
     public void useTreadmill()
     {
-        if (Input.GetButtonDown("Fire1") && isPlayerNear && PlayerController.instance.canMove)
-        {
-            PetStats.instance.gainSpeed(3);         
+        if (Input.GetButtonDown("Fire1") && isPlayerNear && !PlayerController.instance.isWaiting && mouseEnter)
+        {         
             PetStats.instance.GainSleepiness(sleepinessToAdd);
-            Clock.instance.PassTime(1);
+
+            // when i pass time its not instantly updating the color the background should be.
+            // let's speed time up for 1 hour instead of skipping an hour.
+            if (!PlayerController.instance.isWaiting)
+            {
+                Clock.instance.SpeedupTime(6, 2);
+            }
 
 
+            var go = Instantiate(GameAssets.i.GreenStatCoin, GameMenu.instance.transform);
+            go.transform.position = Input.mousePosition;
             MusicPlayer.instance.PlaySFX(soundToPlay);           
             Debug.Log("trained on treamill");
         }

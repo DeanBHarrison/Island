@@ -46,11 +46,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Wolf
   unitLevel: 99
-  damage: 10
-  maxHP: 25
-  currentHP: 20
+  Power: 5
+  currentResolve: 40
+  maxResolve: 40
+  HitsPerRound: 3
+  Grit: 3
   currentEnergy: 3
-  maxEnergy: 3
+  maxEnergy: 10
 --- !u!1 &9181539995036458865
 GameObject:
   m_ObjectHideFlags: 0

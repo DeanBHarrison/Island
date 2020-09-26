@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public static PlayerController instance;
 
     public bool canMove = true;
+    public bool isWaiting = false;
 
     private Vector3 bottomleftLimit;
     private Vector3 topRightLimit;
@@ -38,26 +39,25 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(GameMenu.instance.menuIsActive || DialogueManager.instance.ChatActive)
+        if (!Clock.instance.shouldTimePass)
         {
 
             canMove = false;
-            Clock.instance.shouldTimePass = false;
-        }else
+        }
+        else
         {
             canMove = true;
-            Clock.instance.shouldTimePass = true; 
         }
 
 
-        if (canMove)
+        if (canMove && !isWaiting)
         {
             theRB.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) * moveSpeed;
         }
@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
                                          Mathf.Clamp(transform.position.y, bottomleftLimit.y, topRightLimit.y), transform.position.z);
     }
 
-    public void  Setbounds(Vector3 botLeft, Vector3 topRight)
+    public void Setbounds(Vector3 botLeft, Vector3 topRight)
     {
         bottomleftLimit = botLeft + new Vector3(1f, 2f, 0f);
         topRightLimit = topRight - new Vector3(1f, 1f, 0f);

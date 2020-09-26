@@ -15,40 +15,8 @@ public class DialogueTrigger : MonoBehaviour
 
 
     // trigger dialogue when NPC is clicked on
-    public void OnMouseUpAsButton()
-    {
-        if (PlayerController.instance.canMove && allowDialogueTrigger)
-        {
-            //starts the dialogue on the dialogue manager
-            TriggerDialogue();
-        }
-        Debug.Log("clicked on NPC - on mouse up");
-
-    }
 
 
-    //Triggers the dialogue, feds in the chat dialogue through parameter
-    public void TriggerDialogue()
-    {
-        DialogueManager.instance.StartDialogue(dialogue);
-    }
 
 
-    // triggers to see if player is close enough to NPC
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "Player")
-        {
-            allowDialogueTrigger = true;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.tag == "Player")
-        {
-            allowDialogueTrigger = false;
-        }
-    }
-  
 }

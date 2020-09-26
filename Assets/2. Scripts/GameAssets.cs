@@ -18,6 +18,28 @@ public class GameAssets : MonoBehaviour
     [Header("Assets")]
     public Transform chatBubble;
 
+    [Header("Coins")]
+    public Transform GOLDCoin;
+    public Transform GOLDCoinGain;
+    public Transform GreenStatCoin;
+    public Transform RedStatCoin;
+    public Transform YellowStatCoin;
+    public Transform BlueStatCoin;
+    public Transform BigGreenStatCoin;
+    public Transform BigRedStatCoin;
+    public Transform BigYellowStatCoin;
+    public Transform BigBlueStatCoin;
+    public Transform SmallGreenStatCoin;
+    public Transform SmallRedStatCoin;
+    public Transform SmallYellowStatCoin;
+    public Transform SmallBlueStatCoin;
+
+    [Header("DontDestroyObjects")]
+    public Transform GameManager;
+    public Transform MusicPlayer;
+    public Transform PetController;
+    public Transform UICanvas;
+
     private void Update()
     {
 

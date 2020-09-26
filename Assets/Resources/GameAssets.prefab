@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 3622498996189797258}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -43,6 +43,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baa82a494cd26ad489cd28707bd63169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HeadSprite: {fileID: 0}
   chatBubble: {fileID: 2664794756277342119, guid: 22f0dc29ce0ad414ab8444b5f487a09a,
     type: 3}
+  GOLDCoin: {fileID: 7933085364177038118, guid: c0a644c8a87e5074f8826bf6681197f9,
+    type: 3}
+  GOLDCoinGain: {fileID: 7933085364177038118, guid: 984cbce2c6c760e47b05b27e9fe070de,
+    type: 3}
+  GreenStatCoin: {fileID: 7933085364177038118, guid: 9bbfbbf8632e22648bb30122195e2554,
+    type: 3}
+  RedStatCoin: {fileID: 7933085364177038118, guid: 87944c074ed78664eb08847af7ae26c6,
+    type: 3}
+  YellowStatCoin: {fileID: 7933085364177038118, guid: 1a223650f340f9f4690a79b9f9eb369f,
+    type: 3}
+  BlueStatCoin: {fileID: 7933085364177038118, guid: 0197f6fcce4ffe2479200687a2dded7b,
+    type: 3}
+  BigGreenStatCoin: {fileID: 7933085364177038118, guid: 96425c7fd99fc564894af26f8fbc2f27,
+    type: 3}
+  BigRedStatCoin: {fileID: 7933085364177038118, guid: 7b18cc8b930815e45b832f74f46aae28,
+    type: 3}
+  BigYellowStatCoin: {fileID: 7933085364177038118, guid: cfc7539ce62b19a44ba5e92e9dcbac18,
+    type: 3}
+  BigBlueStatCoin: {fileID: 7933085364177038118, guid: 43840895fa1091c45aa3d47fe9410bd9,
+    type: 3}
+  SmallGreenStatCoin: {fileID: 7933085364177038118, guid: c1342b3ccac94964fa4b6b17f72c2ae2,
+    type: 3}
+  SmallRedStatCoin: {fileID: 7933085364177038118, guid: b414eb770ed02404bbcbd0eb330911e1,
+    type: 3}
+  SmallYellowStatCoin: {fileID: 7933085364177038118, guid: e3124ff87005d0e43928b0a78f7d2461,
+    type: 3}
+  SmallBlueStatCoin: {fileID: 7933085364177038118, guid: d5da843169514784b8e5716e1087f63d,
+    type: 3}
+  GameManager: {fileID: 0}
+  MusicPlayer: {fileID: 0}
+  PetController: {fileID: 0}
+  UICanvas: {fileID: 0}

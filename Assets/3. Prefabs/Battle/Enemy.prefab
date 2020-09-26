@@ -126,9 +126,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: Sheep
-  unitLevel: 2
-  damage: 5
-  maxHP: 30
-  currentHP: 30
-  currentEnergy: 2
-  maxEnergy: 2
+  unitLevel: 4
+  Power: 8
+  currentResolve: 30
+  maxResolve: 30
+  HitsPerRound: 2
+  Grit: 1
+  currentEnergy: 3
+  maxEnergy: 3
+  numberOfCombos: 3
+  Combo1:
+  - Ram
+  - Ram
+  - Sleep
+  Combo2:
+  - Sleep
+  - Sleep
+  - Sleep
+  Combo3:
+  - Sleep
+  - Sleep
+  - Ram
+  Combo4: []
+  Combo5: []
+  Combo6: []
+  Combo7: []
+  Combo8: []
+  Combo9: []
+  Combo10: []

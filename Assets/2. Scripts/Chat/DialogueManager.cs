@@ -8,6 +8,7 @@ public class DialogueManager : MonoBehaviour
     [Header("yes/no Buttons")]
     public GameObject yesNoInn;
     public GameObject yesNoShop;
+    public GameObject yesNoQuest;
 
     [Header("yes/no triggers")]
     public int buttonSpawnIndex;
@@ -44,11 +45,7 @@ public class DialogueManager : MonoBehaviour
     private void Update()
     {
 
-        if(Input.GetKeyDown(KeyCode.H))
-        {
-            GameMenu.instance.shopMenu.SetActive(true);
-            Debug.Log("tried to set shopmenu active");
-        }
+
     }
     // this method is passing a class through as it's paramter, this class holds all the information of what is to be said in the dialogue
 
@@ -96,6 +93,7 @@ public class DialogueManager : MonoBehaviour
         //add 1 to the sentence counter for spawning options
         currentSentenceCounter++;
 
+        MusicPlayer.instance.PlaySFX(2);
         //this is called before starting the coroutine incase the player clicks next before the chat has ended
         StopAllCoroutines();
 
@@ -109,26 +107,12 @@ public class DialogueManager : MonoBehaviour
     {
         if (currentSentenceCounter == sentenceSpawnIndex)
         {
-            switch (buttonSpawnIndex)
-            {
-                case 0:
-                    yesNoInn.SetActive(true);
-                    break;
-
-                case 1:
-                    yesNoShop.SetActive(true);
-                    break;
-
-                default:
-                    Debug.Log("something messed up spawning dialogue buttons");
-                    break;
-            }
+            EnableDisableGUI(true);
         }
     }
 
-    public void SetChatOption(int ButtonSpawnIndex, int SentenceSpawnIndex)
+    public void SetChatOption(int SentenceSpawnIndex)
     {
-        buttonSpawnIndex = ButtonSpawnIndex;
         sentenceSpawnIndex = SentenceSpawnIndex;
     }
 
@@ -150,6 +134,8 @@ public class DialogueManager : MonoBehaviour
     {
         // bool for animator
         animator.SetBool("isOpen", false);
+
+        EnableDisableGUI(false);
 
         //bool for playercontroller . can move
         ChatActive = false;
@@ -174,69 +160,70 @@ public class DialogueManager : MonoBehaviour
     public void buttonPressNo()
     {
         //disable the button that was activated
-        switch (buttonSpawnIndex)
-        {
-            case 0:
-                yesNoInn.SetActive(false);
-                break;
-
-            case 1:
-                yesNoShop.SetActive(false);
-                break;
-
-            default:
-                Debug.Log("something messed up despawning dialogue buttons");
-                break;
-        }
+        EnableDisableGUI(false);
         // carry on the conversation so the chat box closes
         DisplayNextSentence();
+        MusicPlayer.instance.PlaySFX(2);
     }
 
     public void buttonPressYesInn()
     {
         //disable the button that was activated
-        switch (buttonSpawnIndex)
-        {
-            case 0:
-                yesNoInn.SetActive(false);
-                break;
-
-            case 1:
-                yesNoShop.SetActive(false);
-                break;
-
-            default:
-                Debug.Log("something messed up despawning dialogue buttons");
-                break;
-        }
+        EnableDisableGUI(false);
 
         Clock.instance.PassTime(PetStats.instance.sleepLength);
             PetStats.instance.currentSleepiness = 0;
             DisplayNextSentence();
+        MusicPlayer.instance.PlaySFX(2);
     }
 
     public void buttonPressYesVegVendorReg()
     {
         //GameMenu.instance.shopMenu.SetActive(true);
         //disable the button that was activated
-        switch (buttonSpawnIndex)
-        {
-            case 0:
-                yesNoInn.SetActive(false);
-                break;
-
-            case 1:
-                yesNoShop.SetActive(false);
-                break;
-
-            default:
-                Debug.Log("something messed up despawning dialogue buttons");
-                break;
-        }
+        EnableDisableGUI(false);
 
         GameMenu.instance.shopMenu.SetActive(true);
         GameMenu.instance.menuIsActive = true;
         VegVendor.instance.VegVendorSetupShop();
         DisplayNextSentence();
+        MusicPlayer.instance.PlaySFX(2);
     }
+
+    public void ButtonYesQuest()
+    {
+        //GameMenu.instance.shopMenu.SetActive(true);
+        //disable the button that was activated
+        EnableDisableGUI(false);
+
+        GameMenu.instance.questMenu.SetActive(true);
+        GameMenu.instance.menuIsActive = true;;
+        DisplayNextSentence();
+        MusicPlayer.instance.PlaySFX(2);
+    }
+
+
+    private void EnableDisableGUI(bool onOff)
+    {
+        switch (buttons)
+        {
+            case ButtonSelect.Inn:
+                yesNoInn.SetActive(onOff);
+                break;
+            case ButtonSelect.Shop:
+                yesNoShop.SetActive(onOff);
+                break;
+            case ButtonSelect.NPC:
+                break;
+            case ButtonSelect.Quest:
+                yesNoQuest.SetActive(onOff);
+                break;
+            default:
+                Debug.Log("something messed up with dialogue buttons");
+                break;
+        }
+    }
+
+    public ButtonSelect buttons;
 }
+

@@ -15,5 +15,8 @@ public class Techs : MonoBehaviour
 
     public int damageAmount;
     public int healingAmount;
+
+    [TextArea(3, 10)]
+    public string Description;
     
 }

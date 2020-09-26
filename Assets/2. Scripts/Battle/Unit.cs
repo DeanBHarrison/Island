@@ -7,24 +7,44 @@ public class Unit : MonoBehaviour
 
     //class keeps track of the stats of the player and enemy as the fight goes on, is attached to the player and enemy and accessed though
     // function paramters in other methods.
+
+
+
     [Header("UI stats")]
     public string unitName;
     public int unitLevel;
 
     [Header("Combat stats")]
-    public int damage;
-    public int maxHP;
-    public int currentHP;
+    public int Power;
+    public int currentResolve;
+    public int maxResolve;
+    public int HitsPerRound;
+    public int Grit;
 
     [Header("Energy resource")]
     public int currentEnergy;
     public int maxEnergy;
 
+    [Header("Enemy Combos")]
+    public int numberOfCombos;
+    public List<string> Combo1;
+    public List<string> Combo2;
+    public List<string> Combo3;
+    public List<string> Combo4;
+    public List<string> Combo5;
+    public List<string> Combo6;
+    public List<string> Combo7;
+    public List<string> Combo8;
+    public List<string> Combo9;
+    public List<string> Combo10;
+
+
+
     public bool TakeDamage(int dmg)
     {
-        currentHP -= dmg;
+        currentResolve -= (dmg - Grit);
 
-        if (currentHP <= 0)
+        if (currentResolve <= 0)
             return true;
         else
             return false;
@@ -33,12 +53,18 @@ public class Unit : MonoBehaviour
 
     public bool SpendEnergy(int Energy)
     {
-        currentEnergy -= Energy;
+        
 
-            if (currentEnergy <= -1)
+        if ((currentEnergy - Energy) <= -1)
+        {
             return true;
+        }
         else
+        {
+            currentEnergy -= Energy;
             return false;
+        }
+            
     }
 
     public void GainEnergy(int Energy)
@@ -51,8 +77,8 @@ public class Unit : MonoBehaviour
 
     public void Heal(int amount)
     {
-        currentHP += amount;
-        if (currentHP > maxHP)
-            currentHP = maxHP;
+        currentResolve += amount;
+        if (currentResolve > maxResolve)
+            currentResolve = maxResolve;
     }
 }

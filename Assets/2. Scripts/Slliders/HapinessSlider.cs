@@ -19,9 +19,21 @@ public class HapinessSlider : MonoBehaviour
     }
     // Update is called once per frame
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            PetStats.instance.currentHapiness += 50;
+            updateHapinessSlider();
+            Debug.Log("tried to add 50 happiness");
+        }
+    }
+
 
     public void updateHapinessSlider()
     {
+
+        //Debug.Log("trying to update happiness slider");
         currentHapiness = PetStats.instance.currentHapiness;
         GetComponent<Slider>().value = currentHapiness;
     }
