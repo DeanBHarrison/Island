@@ -77,3 +77,7 @@ MonoBehaviour:
   MusicPlayer: {fileID: 0}
   PetController: {fileID: 0}
   UICanvas: {fileID: 0}
+  questRewardImage: {fileID: 0}
+  questTitleText: {fileID: 0}
+  questDescriptionText: {fileID: 0}
+  questWindow: {fileID: 3622498996189797258}

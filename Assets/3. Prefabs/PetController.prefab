@@ -361,6 +361,9 @@ MonoBehaviour:
   HungerRate: 50
   petLevel: 1
   maxLevel: 100
+  stats:
+    Strength: 0
+    Speed: 0
   pets: 0
   ResetSleepCycleOnceONLY: 0
   ResetHungerCycleOnceONLY: 0

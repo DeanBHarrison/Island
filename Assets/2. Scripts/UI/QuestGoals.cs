@@ -7,13 +7,11 @@ public class QuestGoals
 {
     public QuestGoalType questGoalType;
 
+    public Sprite objectiveSprite;
     public int requiredAmount;
     public int currentAmount;
-
-    public bool goalIsReached()
-    {
-        return (currentAmount >= requiredAmount);
-    }
+    public string PickupRequired;
+    public bool goalIsReached;
 
     public void EnemyKilled()
     {
@@ -28,6 +26,11 @@ public class QuestGoals
         if (questGoalType == QuestGoalType.Gather)
         {
             currentAmount++;
+        }
+
+        if(currentAmount >= requiredAmount)
+        {
+            goalIsReached = true;
         }
     }
 }

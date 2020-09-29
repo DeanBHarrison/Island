@@ -13,12 +13,12 @@ public class Treadmill : MonoBehaviour
     public float fatigueToAdd;
     public float sleepinessToAdd;
     public bool mouseEnter = false;
-    Transform canvas;
+    
 
     // Start is called before the first frame update
     void Start()
     {
-         canvas = FindObjectOfType<GameMenu>().transform;
+       
     }
 
     // Update is called once per frame

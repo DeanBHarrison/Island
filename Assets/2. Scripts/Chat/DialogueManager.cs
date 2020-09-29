@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
+    public NPC npc;
+
     [Header("yes/no Buttons")]
     public GameObject yesNoInn;
     public GameObject yesNoShop;
@@ -188,6 +190,7 @@ public class DialogueManager : MonoBehaviour
         VegVendor.instance.VegVendorSetupShop();
         DisplayNextSentence();
         MusicPlayer.instance.PlaySFX(2);
+        Debug.Log("Shop tried to open");
     }
 
     public void ButtonYesQuest()
@@ -195,11 +198,17 @@ public class DialogueManager : MonoBehaviour
         //GameMenu.instance.shopMenu.SetActive(true);
         //disable the button that was activated
         EnableDisableGUI(false);
+       
 
-        GameMenu.instance.questMenu.SetActive(true);
-        GameMenu.instance.menuIsActive = true;;
+        if (npc.QuestToGive)
+        {
+            npc.QuestAccepted();
+            GameMenu.instance.questMenu.SetActive(true);
+            GameMenu.instance.menuIsActive = true; 
+        }
         DisplayNextSentence();
         MusicPlayer.instance.PlaySFX(2);
+
     }
 
 

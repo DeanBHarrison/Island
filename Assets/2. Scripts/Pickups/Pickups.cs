@@ -14,7 +14,8 @@ public class Pickups : MonoBehaviour
     public Material standardMat;
     public Material GlowMat;
     public SpriteRenderer theSpriterenderer;
-
+    // on triggers and mouse enter
+    #region 
     public void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player")
@@ -42,6 +43,7 @@ public class Pickups : MonoBehaviour
         theSpriterenderer.material = standardMat;
         mouseEnter = false;
     }
+    #endregion 
 
     public void PickUpItem()
     {
@@ -52,7 +54,7 @@ public class Pickups : MonoBehaviour
             go.transform.position = Input.mousePosition;
 
 
-
+            QuestManager.instance.CheckIfItemNeededForQuest(this);
             Destroy(gameObject);
             isPlayerNear = false;
             MusicPlayer.instance.PlaySFX(soundToPlay);

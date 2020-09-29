@@ -24,22 +24,26 @@ class coin : MonoBehaviour
         {
             case Coins.RedCoin:
                 StrengthBank.Instance.AddBalance(coinValue);
+                PetStats.instance.strength += coinValue;
                 break;
             case Coins.BlueCoin:
                 IntellectBank.Instance.AddBalance(coinValue);
+                PetStats.instance.intellect += coinValue;
                 break;
             case Coins.YellowCoin:
                 CharmBank.Instance.AddBalance(coinValue);
+                PetStats.instance.charm += coinValue;
                 break;
             case Coins.GreenCoin:
                 SpeedBank.Instance.AddBalance(coinValue);
+                PetStats.instance.speed += coinValue;
                 break;
             case Coins.GoldCoin:InventoryManager.instance.GainGold(Mathf.FloorToInt(coinValue));
                 break;
             default:
                 break;
         }
-
+        PetStats.instance.SaveStats();
     }
     private void OnDestroy()
     {

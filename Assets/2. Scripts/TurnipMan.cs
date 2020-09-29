@@ -9,6 +9,8 @@ public class TurnipMan : NPC
 
     private void Awake()
     {
+       
+
         if (instance == null)
         {
             instance = this;
@@ -25,10 +27,9 @@ public class TurnipMan : NPC
     // Start is called before the first frame update
     public void Start()
     {
-        if (QuestToGive)
-        {
-            QuestIcon.gameObject.SetActive(true);
-        }
+        LoadData();
+        QuestAvailable();
+        InvokeRepeating("Chatter", 4f, 20f);
     }
 
     // Update is called once per frame

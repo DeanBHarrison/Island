@@ -11,11 +11,15 @@ public class Quest
     public string title;
     public string description;
     public Sprite RewardSprite;
-    public Coins coinReward;
+    public GameObject[] coinReward;
     public string itemReward;
+    public bool currentlyTracking = true;
 
     public QuestGoals goal;
 
-
+    public void QuestComplete()
+    {
+        isActive = false;
+    }
 
 }

@@ -52,7 +52,7 @@ public class PetStats : MonoBehaviour
     public int petLevel = 1;
     public int maxLevel = 100;
 
-
+    public PlayerStats stats;
 
 
 
@@ -87,7 +87,10 @@ public class PetStats : MonoBehaviour
      }*/
 
 
-
+    public void SaveStats()
+    {
+        SaveLoadSystem.SavePlayerData(strength,speed);
+    }
 
     public void setSleepPattern()
     {
@@ -127,6 +130,11 @@ public class PetStats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        stats = SaveLoadSystem.LoadPlayerStats();
+        strength = stats.Strength;
+        speed = stats.Speed;
+        StrengthBank.Instance.AddBalance(strength);
+        SpeedBank.Instance.AddBalance(speed);
         InvokeRepeating("GettingSleepy", 0.01f, 0.2f);
         InvokeRepeating("GettingHungry", 0.01f, 0.2f);
         InvokeRepeating("GettingBored", 0.01f, 0.2f);

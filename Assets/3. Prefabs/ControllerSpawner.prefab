@@ -46,3 +46,7 @@ MonoBehaviour:
   musicPlayer: {fileID: 2804213402800682076, guid: 2c6889e5e2c2a644c8a26a214c3b2fe5,
     type: 3}
   Menu: {fileID: 6080954982319736004, guid: fd94c98c0d45eea45b3856b2d8a475c9, type: 3}
+  GameManager: {fileID: 29012839384978747, guid: caff3666fc946b542b0a5c52ff9ceec3,
+    type: 3}
+  PetController: {fileID: 7734158965943271544, guid: 149c88880dda6494385d7a57f95fb1b4,
+    type: 3}

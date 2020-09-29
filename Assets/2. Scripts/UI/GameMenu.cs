@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameMenu : MonoBehaviour
 {
@@ -16,6 +17,24 @@ public class GameMenu : MonoBehaviour
 
     [Header("Quest menu")]
     public GameObject questMenu;
+    public Image rewardImage;
+    public Image objectiveImage;
+    public TextMeshProUGUI titleText;
+    public TextMeshProUGUI descriptionText;
+    public GameObject questLog;
+
+    [Header("Quest reward")]
+    public GameObject questRewardMenu;
+    public Image questRewardImage;
+    public TextMeshProUGUI questTitleText;
+
+    [Header("Quest tracker")]
+    public GameObject qTrackerMenu;
+    public TextMeshProUGUI qTrackerTitleString;
+    public TextMeshProUGUI qTrackerRewardString;
+    public TextMeshProUGUI qTrackercurrentValue;
+    public TextMeshProUGUI qTrackermaxValue;
+
 
     [Header("bottom right menus")]
     public GameObject petStatsMenu;
@@ -79,7 +98,13 @@ public class GameMenu : MonoBehaviour
 
 
 
-
+    public void SetQuestInfo(string title, string description, Sprite rewardSprite, Sprite objectiveSprite)
+    {
+        titleText.SetText(title);
+        descriptionText.SetText(description);
+        rewardImage.sprite = rewardSprite;
+        objectiveImage.sprite = objectiveSprite;
+    }
 
     private void SetUpSingleton()
     {
@@ -133,6 +158,7 @@ public class GameMenu : MonoBehaviour
         itemsMenu.SetActive(false);
         petStatsMenu.SetActive(false);
         MapMenu.SetActive(false);
+        questLog.SetActive(false);
         menuIsActive = false;
     }
 
@@ -147,6 +173,21 @@ public class GameMenu : MonoBehaviour
         }
         else
         if (MapMenu.activeInHierarchy)
+        {
+            closeAllMenus();
+        }
+    }
+
+    public void QuestLogButton()
+    {
+        if (!questLog.activeInHierarchy)
+        {
+            closeAllMenus();
+            questLog.SetActive(true);
+            menuIsActive = true;
+        }
+        else
+        if (questLog.activeInHierarchy)
         {
             closeAllMenus();
         }

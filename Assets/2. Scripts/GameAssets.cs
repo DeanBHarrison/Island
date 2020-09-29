@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class GameAssets : MonoBehaviour
 {
@@ -39,6 +41,12 @@ public class GameAssets : MonoBehaviour
     public Transform MusicPlayer;
     public Transform PetController;
     public Transform UICanvas;
+
+    [Header("UI Objects")]
+    public Image questRewardImage;
+    public TextMeshProUGUI questTitleText;
+    public TextMeshProUGUI questDescriptionText;
+    public GameObject questWindow;
 
     private void Update()
     {

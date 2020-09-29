@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class NPC  : MonoBehaviour
+public class NPC : MonoBehaviour
 {
     public ButtonSelect x;
 
@@ -13,12 +14,6 @@ public class NPC  : MonoBehaviour
     public bool QuestToGive;
     public Transform QuestIcon;
     public Quest quest;
-    public Image rewardImage;
-    public TextMeshProUGUI titleText;
-    public TextMeshProUGUI descriptionText;
-    public GameObject questWindow;
-    public NPC activeNPC;
-
 
     [Header("material Glow")]
     public Material standardMat;
@@ -33,12 +28,41 @@ public class NPC  : MonoBehaviour
     [Header("Dialogue")]
     public bool allowDialogueTrigger;
     public Dialogue dialogue;
+    public Dialogue questDialogue;
 
     [Header("Shop")]
     public string[] itemsForSale = new string[54];
 
+    public string npcName = "NPC NAME HERE";
+    NpcDataSaveData npcDataSave;
 
-  
+    public void LoadData()
+    {
+        npcDataSave = SaveLoadSystem.LoadData(npcName);
+        QuestToGive = npcDataSave.QuestToGive;
+    }
+
+    public void QuestAvailable()
+    {
+        if (QuestToGive)
+        {
+            QuestIcon.gameObject.SetActive(true);
+        }
+        else
+        {
+            QuestIcon.gameObject.SetActive(false);
+        }
+    }
+
+    public void QuestAccepted()
+    {
+        
+        QuestToGive = false;
+        SaveLoadSystem.SaveData(npcName, QuestToGive);
+        QuestIcon.gameObject.SetActive(false);
+    }
+
+    #region
     public void Chatter()
     {
         ChatBubble.Create(npcTransform, new Vector2(0, 1f), hoverChat);
@@ -46,9 +70,10 @@ public class NPC  : MonoBehaviour
 
     public void OnMouseEnter()
     {
-        DialogueManager.instance.buttons = x;
-        theSpriterenderer.material = GlowMat;
-        spotLight.SetActive(true);
+      
+            theSpriterenderer.material = GlowMat;
+            spotLight.SetActive(true);
+        
     }
 
     public void OnMouseExit()
@@ -59,15 +84,21 @@ public class NPC  : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && !DialogueManager.instance.ChatActive)
         {
             allowDialogueTrigger = true;
-            DialogueManager.instance.SetChatOption(dialogue.sentences.Length);
+            DialogueManager.instance.buttons = x;
+
             if (QuestToGive)
             {
-                SetQuest();
+                DialogueManager.instance.SetChatOption(questDialogue.sentences.Length);
+                GameMenu.instance.SetQuestInfo(quest.title, quest.description, quest.RewardSprite, quest.goal.objectiveSprite);
+            }else
+            {
+                DialogueManager.instance.SetChatOption(dialogue.sentences.Length);
             }
             QuestManager.instance.npc = this;
+            DialogueManager.instance.npc = this;
         }
     }
 
@@ -81,24 +112,28 @@ public class NPC  : MonoBehaviour
 
     public void OnMouseUpAsButton()
     {
-        if (PlayerController.instance.canMove && allowDialogueTrigger)
+        if (PlayerController.instance.canMove && allowDialogueTrigger && !EventSystem.current.IsPointerOverGameObject())
         {
-            TriggerDialogue();
+           
+                TriggerDialogue();
         }
 
     }
-
-    public void SetQuest()
+    public void TriggerDialogue()
     {
-        titleText.SetText(quest.title);
-        descriptionText.SetText(quest.description);
-        rewardImage.sprite = quest.RewardSprite;
+        if (QuestToGive)
+        {
+            DialogueManager.instance.StartDialogue(questDialogue);
+        }else
+        {
+            DialogueManager.instance.StartDialogue(dialogue);
+        }
     }
+    #endregion
 
 
     //Triggers the dialogue, feds in the chat dialogue through parameter
-    public void TriggerDialogue()
-    {
-        DialogueManager.instance.StartDialogue(dialogue);
-    }
+
+
+
 }
