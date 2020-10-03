@@ -22,6 +22,7 @@ public class GameMenu : MonoBehaviour
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI descriptionText;
     public GameObject questLog;
+    public GameObject questParent;
 
     [Header("Quest reward")]
     public GameObject questRewardMenu;

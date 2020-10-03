@@ -50,7 +50,7 @@ public static class SaveLoadSystem
     {
         NpcDataSaveData saveData = new NpcDataSaveData(npcName, questAccepted);
         string jsonData = JsonUtility.ToJson(saveData, true);
-        File.WriteAllText($"{Application.dataPath}/SaveData/{npcName}_data.json", jsonData);
+        //File.WriteAllText($"{Application.dataPath}/SaveData/{npcName}_data.json", jsonData);
         Debug.Log($"File Saved : {Application.dataPath}/SaveData/{npcName}_data.json");
     }
 
@@ -58,7 +58,7 @@ public static class SaveLoadSystem
     {
         PlayerStats savePlayerData = new PlayerStats(strength, speed);
         string jsonData = JsonUtility.ToJson(savePlayerData, true);
-        File.WriteAllText($"{Application.dataPath}/SaveData/playerstats_data.json", jsonData);
+       // File.WriteAllText($"{Application.dataPath}/SaveData/playerstats_data.json", jsonData);
         Debug.Log($"File Saved : {Application.dataPath}/SaveData/playerstats_data.json");
     }
 
