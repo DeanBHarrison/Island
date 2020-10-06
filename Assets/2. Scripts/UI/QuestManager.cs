@@ -39,6 +39,7 @@ public class QuestManager : MonoBehaviour
             {
                 questsToFillTracker.Add(quests[x]);
             }
+            x++;
         }
         UpdateQuestTracker();
     }
@@ -68,9 +69,8 @@ public class QuestManager : MonoBehaviour
     {
         ClearQuestTracker();
 
-        int x = 0;
 
-        foreach (Quest quest in quests)
+        foreach (Quest quest in questsToFillTracker)
         {
 
             if (questsToFillTracker.Count > questsInTracker.Count)
@@ -82,10 +82,10 @@ public class QuestManager : MonoBehaviour
 
                 //calls setup() on questInTracker game object sets title/objective tally/image
                 QuestTracker questInTracker = G.GetComponent<QuestTracker>();
-                questInTracker.Setup(questsToFillTracker[x]);
-                x++;
+                questInTracker.Setup(quest);
             }
         }
+
     }
 
     public void ClearQuestLog()
