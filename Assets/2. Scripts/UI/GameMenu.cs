@@ -183,6 +183,9 @@ public class GameMenu : MonoBehaviour
     {
         if (!questLog.activeInHierarchy)
         {
+            QuestManager.instance.UpdateQuestLog();
+            QuestManager.instance.UpdateQuestsToTrack();
+            
             closeAllMenus();
             questLog.SetActive(true);
             menuIsActive = true;

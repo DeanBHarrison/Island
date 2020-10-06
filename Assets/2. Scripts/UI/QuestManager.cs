@@ -22,181 +22,108 @@ public class QuestManager : MonoBehaviour
     
 
     [Header("Quest tracker")]
-    public List<GameObject> questBeingTracked = new List<GameObject>();
     public GameObject questTrackerPrefab;
     public GameObject questTrackerParent;
 
     public List<Quest> quests = new List<Quest>();
+    public List<Quest> questsToFillTracker = new List<Quest>();
+    public List<GameObject> questsInTracker = new List<GameObject>();
 
-
-    //
-    // delete my crappy method of doing things
-    // create a class on the objects I instantiate to update text/images 
-    // if a button if toggled off delete 1 object and then re run  the text/image update
-    public void toggleClick()
+    public void UpdateQuestsToTrack()
     {
-        Debug.Log("toggle");
-        Debug.Log("quest count" + questsInLog.Count);
-        for (int i = 0; i < questsInLog.Count; i++)
+        questsToFillTracker.Clear();
+        int x = 0;
+        foreach(Toggle toggle in toggles)
         {
-            if (!toggles[i].isOn)
+            if(toggle.isOn)
             {
-
-                Debug.Log("destroy??");
-                Destroy(questBeingTracked[i]);
-                questBeingTracked.Remove(questBeingTracked[i]);
-
+                questsToFillTracker.Add(quests[x]);
             }
         }
-        //UpdateQuestTracker();
+        UpdateQuestTracker();
     }
 
+
+    public void UpdateQuestLog()
+    {
+        ClearQuestLog();   
+
+        // adds a gameobject to the quest log and adds it to the questsInLog list.
+        foreach (Quest quest in quests)
+        {
+            if (questsInLog.Count < quests.Count)
+            {
+                GameObject G = Instantiate(questLogPrefab, questLogParent.transform);
+                questsInLog.Add(G);
+
+                //calls setup() on QuestInLog game object sets title/adds toggle to list.
+                QuestInLog questInLog = G.GetComponent<QuestInLog>();
+                questInLog.Setup(quest);
+            }           
+        }
+    }
+
+   
     public void UpdateQuestTracker()
     {
-        Debug.Log("toggle");
-        Debug.Log("update tracker quest count " + quests.Count);
-        //instantiate gameobjects for every quest
-        for (int i = 0; i < quests.Count; i++)
-        {
-           
-
-           // if (quests.Count > questBeingTracked.Count )
-           // {
-               
-                GameObject G = Instantiate(questTrackerPrefab, questTrackerParent.transform);
-                questBeingTracked.Add(G);
-             
-            //}
-        }
+        ClearQuestTracker();
 
         int x = 0;
 
-        foreach (GameObject quest in questBeingTracked)
+        foreach (Quest quest in quests)
         {
-            if (toggles[x].isOn)
+
+            if (questsToFillTracker.Count > questsInTracker.Count)
             {
-                quest.GetComponentsInChildren<TextMeshProUGUI>()[0].SetText(quests[x].description);
-                quest.GetComponentInChildren<Text>().text = quests[x].goal.currentAmount + "/" + quests[x].goal.requiredAmount;
+
+                Debug.Log("trying to instantiate quest tracker stuff");
+                GameObject G = Instantiate(questTrackerPrefab, questTrackerParent.transform);
+                questsInTracker.Add(G);
+
+                //calls setup() on questInTracker game object sets title/objective tally/image
+                QuestTracker questInTracker = G.GetComponent<QuestTracker>();
+                questInTracker.Setup(questsToFillTracker[x]);
+                x++;
             }
-
-            x++;
         }
     }
 
-    public void Start()
-    {
-        //SetUpTrackerbuttons();
-    }
-
-    /*public void SetUpTrackerbuttons()
-    {
-        
-        for (int i = 0; i < toggles.Count; i++)
+    public void ClearQuestLog()
+    {       
+        for (int i = 0; i < questsInLog.Count; i++)
         {
-            // gives each of the 54 buttons a number index in it's buttonvalue field from 1 to 54
-            toggles[i].buttonValue = i;
+            Destroy(questsInLog[i]);
+            Destroy(toggles[i]);           
         }
-    }*/
+        questsInLog.Clear();
+        toggles.Clear();
+    }
 
+    public void ClearQuestTracker()
+    {
+        for (int i = 0; i < questsInTracker.Count; i++)
+        {
+            Destroy(questsInTracker[i]);
+            
+        }
+        questsInTracker.Clear();
+    }
 
 
     public void AcceptQuest()
     {
+        //adds the quest from NPC to quest manager quest list
         quests.Add(npc.quest);
+        //sets correct info on NPC
         npc.quest.isActive = true;
         npc.QuestToGive = false;
+        //enables the accept quest menu
         GameMenu.instance.questMenu.SetActive(false);
         UpdateQuestLog();
-        UpdateQuestTracker();
+        UpdateQuestsToTrack();
     }
 
-    public void UpdateQuestLog()
-    {
-
-
-        for (int i = 0; i < quests.Count; i++)
-        {
-            if (quests.Count > questsInLog.Count)
-            {
-
-                GameObject G = Instantiate(questLogPrefab, questLogParent.transform);
-                questsInLog.Add(G);
-                toggles.Add(G.GetComponentInChildren<Toggle>());
-            }
-        }
-
-        int x = 0;
-
-        foreach (GameObject quest in questsInLog)
-        {
-            if (x < quests.Count)
-            {
-                quest.GetComponentInChildren<TextMeshProUGUI>().SetText(quests[x].description);
-                
-                
-            }
-            else
-            {
-                questsInLog.Remove(quest);
-            }
-            x++;
-        }
-
-
-    }
-
-   /* public void UpdateQuestTracker()
-    {
-        int x = 0;
-        int y = 0;
-        int z = 0;
-        //update titles
-        foreach (TextMeshProUGUI qt in QTrackerstitle)
-        {
-            if (x < quests.Count)
-            {
-                qt.SetText(quests[x].description);
-            }
-            else
-            {
-                qt.SetText("");
-            }
-            x++;
-        }
-
-        //update object sprite
-        foreach (Image QI in QTrackersObjective)
-        {
-            if (y < quests.Count)
-            {
-                QTrackersObjective[y].gameObject.SetActive(true);
-                QI.sprite = quests[y].goal.objectiveSprite;
-            }
-            else
-            {
-                QTrackersObjective[y].gameObject.SetActive(false);
-            }
-            y++;
-        }
-
-        //upate progress
-
-        foreach (TextMeshProUGUI QT in QTrackersProgress)
-        {
-            if (z < quests.Count)
-            {
-                QTrackersProgress[z].SetText(quests[z].goal.currentAmount.ToString() + "/" + quests[z].goal.requiredAmount.ToString());
-            }
-            else
-            {
-                QTrackersProgress[z].SetText("");
-            }
-            z++;
-        }
-    }*/
-
-
-
+    #region quest progress update/completion
     public void CheckIfItemNeededForQuest(Pickups ItemPickedUp)
     {
         //cycle through current quests
@@ -256,17 +183,176 @@ public class QuestManager : MonoBehaviour
 
                     go.transform.position = Input.mousePosition;
                 }
-                //remove quests from list
-                // questTitles[i].SetText("");
+
                 quests.Remove(quests[i]);
-                UpdateQuestLog();
-                //UpdateQuestTracker();
                 GameMenu.instance.questRewardMenu.SetActive(false);
             }
         }
 
     }
 
+    #endregion
+
+    #region deleted code
+    /* public void toggleClick()
+     {
+         questBeingTracked.Clear();
+         questsToFillTracker.Clear();
+
+         int x = 0;
+
+         foreach (Toggle toggle in toggles)
+         {
+             Debug.Log("Toggle 1");
+             if (toggle.isOn)
+             {
+                 Debug.Log("Toggle 2");
+                 questsToFillTracker.Add(quests[x]);
+             }
+             x++;
+         }
+
+
+         for (int i = 0; i < quests.Count; i++)
+         {
+             Debug.Log("Toggle 3");
+             if (toggles[i].isOn)
+             {
+
+                 Debug.Log("Toggle 4");
+                 GameObject G = Instantiate(questTrackerPrefab, questTrackerParent.transform);
+                 questBeingTracked.Add(G);
+             }
+         }
+     }*/
+
+
+    // RE DESIGNED THE CODE ABOVE
+    /* public void UpdateQuestTracker()
+     {
+         Debug.Log("toggle");
+         Debug.Log("update tracker quest count " + quests.Count);
+         //instantiate gameobjects for every quest
+         for (int i = 0; i < quests.Count; i++)
+         {
+
+
+            // if (quests.Count > questBeingTracked.Count )
+            // {
+
+
+
+             //}
+         }
+
+         int x = 0;
+
+         foreach (GameObject quest in questBeingTracked)
+         {
+             if (toggles[x].isOn)
+             {
+                 quest.GetComponentsInChildren<TextMeshProUGUI>()[0].SetText(quests[x].description);
+                 quest.GetComponentInChildren<Text>().text = quests[x].goal.currentAmount + "/" + quests[x].goal.requiredAmount;
+             }
+
+             x++;
+         }
+     }*/
+
+
+
+    /*public void SetUpTrackerbuttons()
+    {
+        
+        for (int i = 0; i < toggles.Count; i++)
+        {
+            // gives each of the 54 buttons a number index in it's buttonvalue field from 1 to 54
+            toggles[i].buttonValue = i;
+        }
+    }*/
+
+    /*public void UpdateQuestLog()
+   {
+       for (int i = 0; i < quests.Count; i++)
+       {
+           Debug.Log("testtest");
+           if (quests.Count > questsInLog.Count)
+           {
+               Debug.Log("toggle should be added");
+               GameObject G = Instantiate(questLogPrefab, questLogParent.transform);
+               questsInLog.Add(G);
+               toggles.Add(G.GetComponentInChildren<Toggle>());
+           }
+       }
+
+       int x = 0;
+
+       foreach (GameObject quest in questsInLog)
+       {
+           if (x < quests.Count)
+           {
+               quest.GetComponentInChildren<TextMeshProUGUI>().SetText(quests[x].description);
+
+           }
+           else
+           {
+               questsInLog.Remove(quest);
+           }
+           x++;
+       }
+   }*/
+
+    /* public void UpdateQuestTracker()
+     {
+         int x = 0;
+         int y = 0;
+         int z = 0;
+         //update titles
+         foreach (TextMeshProUGUI qt in QTrackerstitle)
+         {
+             if (x < quests.Count)
+             {
+                 qt.SetText(quests[x].description);
+             }
+             else
+             {
+                 qt.SetText("");
+             }
+             x++;
+         }
+
+         //update object sprite
+         foreach (Image QI in QTrackersObjective)
+         {
+             if (y < quests.Count)
+             {
+                 QTrackersObjective[y].gameObject.SetActive(true);
+                 QI.sprite = quests[y].goal.objectiveSprite;
+             }
+             else
+             {
+                 QTrackersObjective[y].gameObject.SetActive(false);
+             }
+             y++;
+         }
+
+         //upate progress
+
+         foreach (TextMeshProUGUI QT in QTrackersProgress)
+         {
+             if (z < quests.Count)
+             {
+                 QTrackersProgress[z].SetText(quests[z].goal.currentAmount.ToString() + "/" + quests[z].goal.requiredAmount.ToString());
+             }
+             else
+             {
+                 QTrackersProgress[z].SetText("");
+             }
+             z++;
+         }
+     }*/
+
+    #endregion
 
     private void Awake()
     {
@@ -288,5 +374,10 @@ public class QuestManager : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void Start()
+    {
+        //SetUpTrackerbuttons();
     }
 }

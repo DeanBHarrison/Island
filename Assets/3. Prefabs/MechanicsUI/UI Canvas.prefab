@@ -36837,6 +36837,7 @@ MonoBehaviour:
     type: 3}
   questTrackerParent: {fileID: 596634345696190727}
   quests: []
+  questsToFillTracker: []
 --- !u!1 &6080954982442610103
 GameObject:
   m_ObjectHideFlags: 0
