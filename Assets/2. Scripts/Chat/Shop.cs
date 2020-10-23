@@ -38,7 +38,7 @@ public class Shop : MonoBehaviour
 
     public void SetUpItems()
     {
-        goldText.text = InventoryManager.instance.currentGold.ToString() + "g";
+        GameMenu.instance.SetCurrentGold();
         for (int i = 0; i < buyItemButtons.Length; i++)
         {
             // gives each of the 54 buttons a number index in it's buttonvalue field from 1 to 54
@@ -74,20 +74,28 @@ public class Shop : MonoBehaviour
         buyItemPrice.text = selectedItem.value + "g";
     }
 
-    public void closeActionButton()
+    public void ActionDescriptionOnOff(bool OnOff)
     {
-        itemActionBox.SetActive(false);
+        itemActionBox.SetActive(OnOff);
+        itemDescriptionBox.SetActive(OnOff);
+    }
+
+    public void CloseButton()
+    {
+        ActionDescriptionOnOff(false);
     }
     public void buyItem()
     {
         if(InventoryManager.instance.currentGold >= selectedItem.value)
         {
             InventoryManager.instance.currentGold -= selectedItem.value;
+            var GoldCoin = Instantiate(GameAssets.i.GOLDCoin, GameMenu.instance.transform);
+            GoldCoin.transform.position = GameMenu.instance.goldText.transform.position;
             InventoryManager.instance.AddItem(selectedItem.itemName);
                
         }
 
-        goldText.text = InventoryManager.instance.currentGold.ToString() + "g";
+        //goldText.text = InventoryManager.instance.currentGold.ToString() + "g";
         GameMenu.instance.SetCurrentGold();
     }
 

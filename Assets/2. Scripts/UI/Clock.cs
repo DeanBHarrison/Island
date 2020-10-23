@@ -27,10 +27,10 @@ public class Clock : MonoBehaviour
     
 
     //how long 1 day rotation will take in real seconds
-    public float realSecondsPerDay = 5f;
+    public float realSecondsPerDay = 48f;
     // needed only to rotate the hand on the clock
     private float rotationDegreesPerDay = 360f;
-    // daylength starts at 0 and gets bigger by 1 every day
+    // daylength starts at 0 and gets bigger by 1 every day, this is the original variable that controls time.
     public float dayLength;
     // this is daylength % 1, meaning its 0 to 1. 0 being the start of the day 1 being the end.
     private float dayNormalised;
@@ -56,6 +56,11 @@ public class Clock : MonoBehaviour
         setUpSingleton();
         InvokeRepeating("TimeForInvokeRepeating", 0.01f, 0.2f);
 
+    }
+
+    public void StopStartTime(bool YesNoTime)
+    {
+        shouldTimePass = YesNoTime;
     }
 
     private void Start()
@@ -86,9 +91,12 @@ public class Clock : MonoBehaviour
     // Start is called before the first frame update
 
     // Update is called once per frame
+
+    // 23.5+24.5 
     void Update()
     {       
-        TimePassing();      
+        TimePassing();
+
     }
 
     private void TimeForInvokeRepeating()
@@ -101,13 +109,22 @@ public class Clock : MonoBehaviour
     public void TimePassing()
     {
         timeOfDay = dayNormalised * 24;
+        
+
         if (shouldTimePass)
         {
+           // Debug.Log("time passing!!!" + shouldTimePass);
             // if you call time.delta every frame you are essentially adding 1 per second, with real seconds at 24 its adding 1/24th of a second per second.
             dayLength += Time.deltaTime / realSecondsPerDay;
             dayNormalised = dayLength % 1f;
             ClockHand.transform.eulerAngles = new Vector3(0, 0, -dayNormalised * rotationDegreesPerDay * 2f);
         }
+    }
+
+    public void TimePassOnce()
+    {
+        dayNormalised = dayLength % 1f;
+        ClockHand.transform.eulerAngles = new Vector3(0, 0, -dayNormalised * rotationDegreesPerDay * 2f);
     }
 
     public float Sunset()
@@ -232,4 +249,27 @@ public class Clock : MonoBehaviour
         CheckIfItShouldBeDark();
         shouldTimePass = true;
     }
+
+
+
+
+    public void SpeedupTime(int speed, int hourstopass)
+    {
+        StartCoroutine(Speedtime(speed, hourstopass));
+    }
+    IEnumerator Speedtime(int speed, int hourstopass)
+    {
+        PlayerController.instance.isWaiting = true;
+        double time = timeOfDay;
+        while (timeOfDay == time)
+        {
+            realSecondsPerDay /= speed;
+            yield return new WaitForSeconds(realSecondsPerDay/24* hourstopass);
+            realSecondsPerDay *= speed;
+        }
+        PlayerController.instance.isWaiting = false;
+
+    }
+
+
 }

@@ -7,6 +7,12 @@ using UnityEngine.XR;
 public class TechController : MonoBehaviour
 {
 
+    [Header("Description box objects")]
+    public GameObject descriptionBox;
+    public Text DescriptionBoxText;
+    public Text Energycost;
+    public Image TechImage;
+
     public Text currentHandSizeText;
     public Text maxHandSizeText;
 
@@ -80,7 +86,9 @@ public class TechController : MonoBehaviour
             currentHandSize--;
             SortHandTechs();
             updateHandCounter();
-        }else
+            descriptionBox.SetActive(false);
+        }
+        else
         {
             Debug.Log("out of energy");
         }
@@ -100,6 +108,7 @@ public class TechController : MonoBehaviour
             currentHandSize--;
             SortHandTechs();
             updateHandCounter();
+            descriptionBox.SetActive(false);
         }
         else
         {
@@ -121,6 +130,7 @@ public class TechController : MonoBehaviour
             currentHandSize--;
             SortHandTechs();
             updateHandCounter();
+            descriptionBox.SetActive(false);
         }
         else
         {
@@ -142,6 +152,7 @@ public class TechController : MonoBehaviour
             currentHandSize--;
             SortHandTechs();
             updateHandCounter();
+            descriptionBox.SetActive(false);
         }
         else
         {
@@ -163,6 +174,7 @@ public class TechController : MonoBehaviour
             currentHandSize--;
             SortHandTechs();
             updateHandCounter();
+            descriptionBox.SetActive(false);
         }
         else
         {
@@ -220,27 +232,31 @@ public class TechController : MonoBehaviour
     {
         for (int i = 0; i < CardsToDraw; i++)
         {
-            // set a number index for cards to draw so that it can be randomed.
-            int cardToDraw = Random.Range(0, deckSize);
+            if (currentHandSize < maxHandSize)
+            {
+                // set a number index for cards to draw so that it can be randomed.
+                int cardToDraw = Random.Range(0, deckSize);
 
-            // Sets the first card in our hand to be whatever we randomed the card to draw to be above
-            // we first have to call the function get tech details which takes in a string and returns the Tech class for that card.
+                // Sets the first card in our hand to be whatever we randomed the card to draw to be above
+                // we first have to call the function get tech details which takes in a string and returns the Tech class for that card.
 
 
-            HandGO[currentHandSize].SetActive(true);
-            HandTechs[currentHandSize] = GetTechDetails(Deck[cardToDraw]);
-            //sets the game object to have the sprite of the tech just randomed.
-            HandGO[currentHandSize].GetComponent<Image>().sprite = HandTechs[currentHandSize].techSprite;
+                HandGO[currentHandSize].SetActive(true);
+                HandTechs[currentHandSize] = GetTechDetails(Deck[cardToDraw]);
+                //sets the game object to have the sprite of the tech just randomed.
+                HandGO[currentHandSize].GetComponent<Image>().sprite = HandTechs[currentHandSize].techSprite;
 
-            //remove the drawn card from the deck
-            Deck.Remove(Deck[cardToDraw]);
+                //remove the drawn card from the deck
+                Deck.Remove(Deck[cardToDraw]);
 
-            //reduce deck size - this causes the RNG with card draw to lower above
-            deckSize--;
+                //reduce deck size - this causes the RNG with card draw to lower above
+                deckSize--;
 
-            //add 1 to the current hand size
-            currentHandSize++;
-            updateHandCounter();
+                //add 1 to the current hand size
+                currentHandSize++;
+                updateHandCounter();
+            }
+
         }
     }
 
@@ -310,4 +326,6 @@ public class TechController : MonoBehaviour
         }
         return null;
     }
+
+
 }

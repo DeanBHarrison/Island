@@ -39,6 +39,8 @@ public class Item : MonoBehaviour
         Debug.Log("item used");
         if(isFood)
         {
+
+            MusicPlayer.instance.PlaySFX(5);
             if(affectRed)
             {
                 PetStats.instance.currentHunger += amountToChange;
@@ -50,6 +52,8 @@ public class Item : MonoBehaviour
         }
 
         InventoryManager.instance.RemoveItem(itemName);
+
+        // if there arent any items left close the action box
  
     }
 }

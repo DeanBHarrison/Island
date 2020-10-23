@@ -59,7 +59,7 @@ public class ChatBubble : MonoBehaviour
         foreach (char letter in sentence.ToCharArray())
         {
             textMeshPro.text += letter;
-            yield return null;
+            yield return new WaitForSeconds(0.05f);
         }
 
     }

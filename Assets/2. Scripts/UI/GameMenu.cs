@@ -3,13 +3,39 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameMenu : MonoBehaviour
 {
+
+    //GAME MENU - this script should have all the gameobjects required for the functionality of all the UI menus.
+
     public static GameMenu instance;
     public GameObject gameMenu;
     public GameObject petImage;
     public GameObject shopMenu;
+
+    [Header("Quest menu")]
+    public GameObject questMenu;
+    public Image rewardImage;
+    public Image objectiveImage;
+    public TextMeshProUGUI titleText;
+    public TextMeshProUGUI descriptionText;
+    public GameObject questLog;
+    public GameObject questParent;
+
+    [Header("Quest reward")]
+    public GameObject questRewardMenu;
+    public Image questRewardImage;
+    public TextMeshProUGUI questTitleText;
+
+    [Header("Quest tracker")]
+    public GameObject qTrackerMenu;
+    public TextMeshProUGUI qTrackerTitleString;
+    public TextMeshProUGUI qTrackerRewardString;
+    public TextMeshProUGUI qTrackercurrentValue;
+    public TextMeshProUGUI qTrackermaxValue;
+
 
     [Header("bottom right menus")]
     public GameObject petStatsMenu;
@@ -17,14 +43,25 @@ public class GameMenu : MonoBehaviour
     public GameObject MapMenu;
     public bool menuIsActive;
 
- 
+    [Header("Key Attribute menus")]
+    public GameObject StrengthMenu;
+    public GameObject SpeedMenu;
+    public GameObject IntellectMenu;
+    public GameObject CharmMenu;
+
+    [Header("Key Attribute text")]
+    public Text KAStrength;
+    public Text KAspeed;
+    public Text KACharm;
+    public Text KAIntellect;
+
+
     public Text goldText;
 
     [Header("Menu stats gameobjects")]
     public Text maxRedMenu;
     public Text maxBlueMenu;
     public Text strengthMenu;
-    public Text gritMenu;
     public Text speedMenu;
     public Text intellectMenu;
     public Text charmMenu;
@@ -50,6 +87,8 @@ public class GameMenu : MonoBehaviour
     private void Start()
     {
         SetCurrentGold();
+        InvokeRepeating("SetKeyAttributeStatText", 0.01f, 0.2f);
+        InvokeRepeating("setPetStatsOnMenu", 0.01f, 0.2f);
     }
 
     // Update is called once per frame
@@ -60,7 +99,13 @@ public class GameMenu : MonoBehaviour
 
 
 
-
+    public void SetQuestInfo(string title, string description, Sprite rewardSprite, Sprite objectiveSprite)
+    {
+        titleText.SetText(title);
+        descriptionText.SetText(description);
+        rewardImage.sprite = rewardSprite;
+        objectiveImage.sprite = objectiveSprite;
+    }
 
     private void SetUpSingleton()
     {
@@ -82,21 +127,30 @@ public class GameMenu : MonoBehaviour
     // updates the menu text to be the pets current stats / and current gold / and sets image
     public void setPetStatsOnMenu()
     {
-     petImage.GetComponent<Image>().sprite = PetSpawner.instance.SelectedPetSO.artwork;
+        petImage.GetComponent<Image>().sprite = PetSpawner.instance.SelectedPetSO.artwork;
         SetCurrentGold();
-     maxRedMenu.text = PetStats.instance.maxRed.ToString();
-     maxBlueMenu.text = PetStats.instance.maxBlue.ToString();
-     strengthMenu.text = PetStats.instance.strength.ToString();
-     speedMenu.text = PetStats.instance.speed.ToString();
-     intellectMenu.text = PetStats.instance.intellect.ToString();
-     charmMenu.text = PetStats.instance.charm.ToString();
-     }
+        maxRedMenu.text = PetStats.instance.maxRed.ToString();
+        maxBlueMenu.text = PetStats.instance.maxBlue.ToString();
+        strengthMenu.text = PetStats.instance.strength.ToString();
+        speedMenu.text = PetStats.instance.speed.ToString();
+        intellectMenu.text = PetStats.instance.intellect.ToString();
+        charmMenu.text = PetStats.instance.charm.ToString();
+    }
+
+    public void SetKeyAttributeStatText()
+    {
+        //KAStrength.text = PetStats.instance.strength.ToString();
+       // KAspeed.text = PetStats.instance.speed.ToString();
+       // KAIntellect.text = PetStats.instance.intellect.ToString();
+       // KACharm.text = PetStats.instance.charm.ToString();
+    }
 
     public void SetCurrentGold()
     {
         goldText.text = InventoryManager.instance.currentGold.ToString() + " g";
 
     }
+
 
     public void closeAllMenus()
     {
@@ -105,6 +159,7 @@ public class GameMenu : MonoBehaviour
         itemsMenu.SetActive(false);
         petStatsMenu.SetActive(false);
         MapMenu.SetActive(false);
+        questLog.SetActive(false);
         menuIsActive = false;
     }
 
@@ -119,6 +174,24 @@ public class GameMenu : MonoBehaviour
         }
         else
         if (MapMenu.activeInHierarchy)
+        {
+            closeAllMenus();
+        }
+    }
+
+    public void QuestLogButton()
+    {
+        if (!questLog.activeInHierarchy)
+        {
+            QuestManager.instance.UpdateQuestLog();
+            QuestManager.instance.UpdateQuestsToTrack();
+            
+            closeAllMenus();
+            questLog.SetActive(true);
+            menuIsActive = true;
+        }
+        else
+        if (questLog.activeInHierarchy)
         {
             closeAllMenus();
         }
@@ -140,8 +213,9 @@ public class GameMenu : MonoBehaviour
 
             // keep track of current menu state
             menuIsActive = true;
-        }else
-        if(itemsMenu.activeInHierarchy)
+        }
+        else
+        if (itemsMenu.activeInHierarchy)
         {
             closeAllMenus();
         }
@@ -156,7 +230,8 @@ public class GameMenu : MonoBehaviour
             gameMenu.SetActive(true);
             petStatsMenu.SetActive(true);
             menuIsActive = true;
-        }else
+        }
+        else
         if (petStatsMenu.activeInHierarchy)
         {
             closeAllMenus();
@@ -175,22 +250,34 @@ public class GameMenu : MonoBehaviour
             Clock.instance.shouldTimePass = true;
         }
     }
+
+    public void PlayButton()
+    {
+        Clock.instance.SpeedupTime(4, 1);
+        MusicPlayer.instance.PlaySFX(6);
+        PetStats.instance.currentHapiness -= 30;
+    }
+
+  
+
+
     // sets the images and info of current held items and gets rid of the images if theyre empty
     public void ShowItems()
     {
-        for(int i = 0; i < itemButtons.Length; i++)
+        for (int i = 0; i < itemButtons.Length; i++)
         {
             // gives each of the 54 buttons a number index in it's buttonvalue field from 1 to 54
             itemButtons[i].buttonValue = i;
 
             // for every item that has a string name in the items held array, set the image object to be active, set the sprite to what it should be,
-            if(InventoryManager.instance.itemsHeld[i] != "")
+            if (InventoryManager.instance.itemsHeld[i] != "")
             {
                 itemButtons[i].buttonImage.gameObject.SetActive(true);
                 // here we have to get the script information for the specific item from the reference item database, so we have to call a function that searches the database given the string of the item we have.
                 itemButtons[i].buttonImage.sprite = InventoryManager.instance.GetItemDetails(InventoryManager.instance.itemsHeld[i]).itemSprite;
                 itemButtons[i].amountText.text = InventoryManager.instance.numberOfItems[i].ToString();
-            }else
+            }
+            else
             {
                 itemButtons[i].buttonImage.gameObject.SetActive(false);
                 itemButtons[i].amountText.text = "";
@@ -204,11 +291,11 @@ public class GameMenu : MonoBehaviour
     {
         activeItem = newItem;
 
-        if(activeItem.isFood)
+        if (activeItem.isFood)
         {
             useButtonText.text = "Eat";
         }
-        else if(activeItem.isItem)
+        else if (activeItem.isItem)
         {
             useButtonText.text = "Use";
         }
@@ -220,7 +307,7 @@ public class GameMenu : MonoBehaviour
     // drops current item
     public void DiscardItem()
     {
-        if(activeItem != null)
+        if (activeItem != null)
         {
             InventoryManager.instance.RemoveItem(activeItem.itemName);
         }

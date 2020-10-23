@@ -17,8 +17,13 @@ public class BattleHud : MonoBehaviour
     {
         nameText.text = unit.unitName;
         levelText.text = "Level " + unit.unitLevel;
-        hpSlider.maxValue = unit.maxHP;
-        hpSlider.value = unit.currentHP;
+        hpSlider.maxValue = unit.maxResolve;
+        hpSlider.value = unit.currentResolve;
+
+    }
+
+    public void SetEnergy(Unit unit)
+    {
         EnergySlider.maxValue = unit.maxEnergy;
         EnergySlider.value = unit.currentEnergy;
     }
