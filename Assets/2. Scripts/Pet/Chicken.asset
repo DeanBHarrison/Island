@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Chicken
   description: Innocent
-  artwork: {fileID: 21300000, guid: ff9ffc9ae26e6f24b8344e199e6ba65d, type: 3}
+  artwork: {fileID: 21300000, guid: 448199bd475312d46b149394cfd94c67, type: 3}

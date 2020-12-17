@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Cat
   description: Rebel
-  artwork: {fileID: 21300000, guid: 17ef1412abc12db46a159d02ef859e25, type: 3}
+  artwork: {fileID: 21300000, guid: 33027424a787aaf40ba4c9983b3a8dc9, type: 3}

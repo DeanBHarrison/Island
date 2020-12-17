@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Lizard
   description: Magician
-  artwork: {fileID: 21300000, guid: 1bc3f0680daafbc449bb9ba8a6b4d859, type: 3}
+  artwork: {fileID: 21300000, guid: 9822d71ab6b893e489319284ecf22b12, type: 3}
