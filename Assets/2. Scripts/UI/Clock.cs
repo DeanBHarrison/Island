@@ -214,12 +214,12 @@ public class Clock : MonoBehaviour
 
         if(ItShouldBeDark)
         {
-            CameraController.instance.light2d.intensity = 0.5f;
+            //CameraController.instance.light2d.intensity = 0.5f;
             //particleController.instance.WhichParticleSystem(true);
         }
         else
         {
-            CameraController.instance.light2d.intensity = 1f;
+            // CameraController.instance.light2d.intensity = 1f;
             //particleController.instance.WhichParticleSystem(false);
         }
        // Debug.Log(ItShouldBeDark);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.Tilemaps;
+using UnityEngine.Rendering.Universal;
 
 public class CameraController : MonoBehaviour
 {
@@ -61,7 +62,9 @@ public class CameraController : MonoBehaviour
         Clock.instance.Sunset();
         if (Clock.instance.TimeOfDayAdjustedForSunset > Clock.instance.sunset && Clock.instance.TimeOfDayAdjustedForSunset < (Clock.instance.sunset + Clock.instance.sunsetDuration))
         {
-            light2d.intensity = Clock.instance.Sunset();
+
+            
+            // light2d.intensity = Clock.instance.Sunset();
             Debug.Log("sunset");
         }
     }
@@ -71,7 +74,7 @@ public class CameraController : MonoBehaviour
         Clock.instance.Sunrise();
         if (Clock.instance.TimeOfDayAdjustedForSunrise > Clock.instance.sunrise && Clock.instance.TimeOfDayAdjustedForSunrise < (Clock.instance.sunrise + Clock.instance.sunriseDuration))
         {
-            light2d.intensity = Clock.instance.Sunrise();
+            //light2d.intensity = Clock.instance.Sunrise();
             // Debug.Log("sunrise");
         }
     }
